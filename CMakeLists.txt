@@ -12,7 +12,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 file(GLOB SOURCES "source/*.cpp")
 
 # Crear el ejecutable con los archivos fuente
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES} "source/Player.cpp")
 
 # Si SFML no está en variables del sistema, indicá rutas manualmente:
 # (Modificá estas rutas si es necesario según donde tengas SFML)
@@ -20,6 +20,7 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 # set(SFML_ROOT "C:\Users\Julian\SFML")
 
 # Buscar la librería SFML
+set(SFML_DIR "C:/Users/Julian/SFML/lib/cmake/SFML")
 find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 
 # Enlazar SFML al ejecutable

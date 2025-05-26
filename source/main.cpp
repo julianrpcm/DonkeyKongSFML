@@ -1,10 +1,10 @@
 #include <SFML/Graphics.hpp>
+#include "Player.hpp"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "¡SFML funcionando!");
-
-    sf::CircleShape circle(50.f); // Radio 50 píxeles
-    circle.setFillColor(sf::Color::Green);
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Donkey Kong SFML");
+    Player player;
+    sf::Clock clock;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -13,8 +13,13 @@ int main() {
                 window.close();
         }
 
+        float deltaTime = clock.restart().asSeconds();
+
+        player.handleInput();
+        player.update(deltaTime);
+
         window.clear();
-        window.draw(circle);
+        player.draw(window);
         window.display();
     }
 
