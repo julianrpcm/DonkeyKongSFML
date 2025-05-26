@@ -1,8 +1,9 @@
 #include <SFML/Graphics.hpp>
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML funcionando");
-    sf::CircleShape circle(50);
+    sf::RenderWindow window(sf::VideoMode(800, 600), "¡SFML funcionando!");
+
+    sf::CircleShape circle(50.f); // Radio 50 píxeles
     circle.setFillColor(sf::Color::Green);
 
     while (window.isOpen()) {
