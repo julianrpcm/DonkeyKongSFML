@@ -1,0 +1,22 @@
+# ninja log v6
+33	895	7701337787176227	external/tmxlite/CMakeFiles/tmxlite.dir/src/ObjectGroup.cpp.obj	f985bfce63dd9d6
+22	562	7701339078215176	CMakeFiles/DonkeyKongSFML.dir/source/Level.cpp.obj	bc84dadbacf6998b
+57	744	7701337787410884	CMakeFiles/DonkeyKongSFML.dir/source/main.cpp.obj	6e830aee7ac2bbf0
+51	707	7701337787322972	external/tmxlite/CMakeFiles/tmxlite.dir/src/detail/pugixml.cpp.obj	35d64f1392051ccd
+51	686	7701334502034198	CMakeFiles/DonkeyKongSFML.dir/source/Player.cpp.obj	4f0c2dac1ec90d28
+562	684	7701339083616869	DonkeyKongSFML.exe	d01552cadd5bc339
+58	690	7701334502108490	CMakeFiles/DonkeyKongSFML.dir/source/pugixml/pugixml.cpp.obj	e0fab995fb1040cd
+41	362	7701334501923567	external/tmxlite/CMakeFiles/tmxlite.dir/src/miniz.c.obj	9a2c57be8726c8df
+23	869	7701337787080073	external/tmxlite/CMakeFiles/tmxlite.dir/src/ImageLayer.cpp.obj	e90fc6605c9e5b5c
+48	876	7701337787322972	external/tmxlite/CMakeFiles/tmxlite.dir/src/ObjectTypes.cpp.obj	eff7b1fe9ffc5191
+39	964	7701337787228258	external/tmxlite/CMakeFiles/tmxlite.dir/src/TileLayer.cpp.obj	14638f5468282d79
+45	971	7701337787289000	external/tmxlite/CMakeFiles/tmxlite.dir/src/Tileset.cpp.obj	f9aa6a41787ff860
+36	844	7701337787208182	external/tmxlite/CMakeFiles/tmxlite.dir/src/Property.cpp.obj	15a774e52266fb47
+20	884	7701337787040775	external/tmxlite/CMakeFiles/tmxlite.dir/src/FreeFuncs.cpp.obj	d3bf454abb098f4f
+27	1113	7701337787107237	external/tmxlite/CMakeFiles/tmxlite.dir/src/Map.cpp.obj	e6169da0cf295502
+42	968	7701337787262183	external/tmxlite/CMakeFiles/tmxlite.dir/src/LayerGroup.cpp.obj	69bc74bde8b060cd
+30	1072	7701337787140578	external/tmxlite/CMakeFiles/tmxlite.dir/src/Object.cpp.obj	7f2c8efd78f41a1e
+1113	1268	7701337797976126	external/tmxlite/tmxlite-d.dll	a88ca7fb2dce4899
+1113	1268	7701337797976126	external/tmxlite/tmxlite-d.lib	a88ca7fb2dce4899
+19	917	7701346230309700	CMakeFiles/DonkeyKongSFML.dir/source/main.cpp.obj	6e830aee7ac2bbf0
+918	1077	7701346239308128	DonkeyKongSFML.exe	d01552cadd5bc339
