@@ -13,7 +13,7 @@ file(GLOB SOURCES "source/*.cpp")
 set(TMXLITE_STATIC_LIB ON CACHE BOOL "Build tmxlite as static library")
 
 add_subdirectory(external/tmxlite)
-add_executable(${PROJECT_NAME} ${SOURCES} ${TMXLITE_SRC} ${PUGIXML_SRC})
+add_executable(${PROJECT_NAME} ${SOURCES} ${TMXLITE_SRC} ${PUGIXML_SRC} "source/Enemy.cpp"  "source/BasicEnemy.cpp")
 # Crear el ejecutable con los archivos fuente
 
 

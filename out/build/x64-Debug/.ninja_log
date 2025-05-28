@@ -1,10 +1,10 @@
 # ninja log v6
 33	895	7701337787176227	external/tmxlite/CMakeFiles/tmxlite.dir/src/ObjectGroup.cpp.obj	f985bfce63dd9d6
-22	562	7701339078215176	CMakeFiles/DonkeyKongSFML.dir/source/Level.cpp.obj	bc84dadbacf6998b
-57	744	7701337787410884	CMakeFiles/DonkeyKongSFML.dir/source/main.cpp.obj	6e830aee7ac2bbf0
+17	870	7701538204172322	CMakeFiles/DonkeyKongSFML.dir/source/Level.cpp.obj	bc84dadbacf6998b
+24	971	7701538204266057	CMakeFiles/DonkeyKongSFML.dir/source/main.cpp.obj	6e830aee7ac2bbf0
 51	707	7701337787322972	external/tmxlite/CMakeFiles/tmxlite.dir/src/detail/pugixml.cpp.obj	35d64f1392051ccd
-51	686	7701334502034198	CMakeFiles/DonkeyKongSFML.dir/source/Player.cpp.obj	4f0c2dac1ec90d28
-562	684	7701339083616869	DonkeyKongSFML.exe	d01552cadd5bc339
+21	832	7701538204230981	CMakeFiles/DonkeyKongSFML.dir/source/Player.cpp.obj	4f0c2dac1ec90d28
+971	1175	7701538213706484	DonkeyKongSFML.exe	398a0457a0f85c7f
 58	690	7701334502108490	CMakeFiles/DonkeyKongSFML.dir/source/pugixml/pugixml.cpp.obj	e0fab995fb1040cd
 41	362	7701334501923567	external/tmxlite/CMakeFiles/tmxlite.dir/src/miniz.c.obj	9a2c57be8726c8df
 23	869	7701337787080073	external/tmxlite/CMakeFiles/tmxlite.dir/src/ImageLayer.cpp.obj	e90fc6605c9e5b5c
@@ -18,5 +18,6 @@
 30	1072	7701337787140578	external/tmxlite/CMakeFiles/tmxlite.dir/src/Object.cpp.obj	7f2c8efd78f41a1e
 1113	1268	7701337797976126	external/tmxlite/tmxlite-d.dll	a88ca7fb2dce4899
 1113	1268	7701337797976126	external/tmxlite/tmxlite-d.lib	a88ca7fb2dce4899
-19	917	7701346230309700	CMakeFiles/DonkeyKongSFML.dir/source/main.cpp.obj	6e830aee7ac2bbf0
-918	1077	7701346239308128	DonkeyKongSFML.exe	d01552cadd5bc339
+13	665	7701538204172322	CMakeFiles/DonkeyKongSFML.dir/source/Enemy.cpp.obj	2854954a6a0f0039
+15	377	7701540974719964	CMakeFiles/DonkeyKongSFML.dir/source/BasicEnemy.cpp.obj	d11b7f1cc063ca94
+378	524	7701540978347797	DonkeyKongSFML.exe	e55f8873f54dcdd7
