@@ -1,5 +1,6 @@
 #include "Player.hpp"
 #include "Level.hpp"
+#include "Enemy.hpp"
 
 Player::Player() {
     shape.setSize({ 24.f, 24.f });
@@ -7,7 +8,7 @@ Player::Player() {
     shape.setPosition(100.f, 100.f);
 }
 
-void Player::update(float dt, const std::vector<sf::FloatRect>& colliders, const std::vector<sf::FloatRect>& ladders, const std::vector<sf::FloatRect>& laddersBlockers) {
+void Player::update(float dt, const std::vector<sf::FloatRect>& colliders, const std::vector<sf::FloatRect>& ladders, const std::vector<sf::FloatRect>& laddersBlockers, std::vector<std::unique_ptr<Enemy>>& enemies) {
     // Movimiento horizontal
     velocity.x = 0.f;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
@@ -73,6 +74,9 @@ void Player::update(float dt, const std::vector<sf::FloatRect>& colliders, const
     shape.move(0.f, velocity.y * dt);
     if (!onLadder)
         handleCollision(allColliders);
+
+    handleEnemyCollisions(enemies);
+
 }
 
 
@@ -122,4 +126,26 @@ sf::FloatRect Player::getBounds() const {
 
 sf::Vector2f Player::getPosition() const {
     return shape.getPosition();
+}
+
+void Player::handleEnemyCollisions(std::vector<std::unique_ptr<Enemy>>& enemies)
+{
+    sf::FloatRect playerBounds = shape.getGlobalBounds();
+
+    for (auto& enemy : enemies) {
+        if (enemy->isDead()) continue;
+
+        sf::FloatRect enemyBounds = enemy->getBounds();
+
+        if (playerBounds.intersects(enemyBounds)) {
+            float playerBottom = playerBounds.top + playerBounds.height;
+            float enemyTop = enemyBounds.top;
+
+            if (playerBottom <= enemyTop + 5.f && velocity.y > 0) {
+                enemy->takeDamage(100);
+                velocity.y = -200.f; // rebote
+            }
+            // Si quieres que el jugador reciba daño al tocarlo lateralmente, podrías añadirlo aquí
+        }
+    }
 }

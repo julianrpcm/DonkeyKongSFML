@@ -56,5 +56,12 @@ void BasicEnemy::update(float deltaTime, const std::vector<sf::FloatRect>& groun
 }
 
 void BasicEnemy::draw(sf::RenderWindow& window) {
+    if (isDead())
+        return;
     window.draw(shape);
+}
+
+sf::FloatRect BasicEnemy::getBounds() const
+{
+    return shape.getGlobalBounds();
 }

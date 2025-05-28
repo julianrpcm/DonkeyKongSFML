@@ -14,6 +14,8 @@ public:
     sf::Vector2f getPosition() const;
     void setPosition(const sf::Vector2f& pos);
 
+    virtual sf::FloatRect getBounds() const = 0;
+
 protected:
     int health = 100;
     const float speed = 100.f;

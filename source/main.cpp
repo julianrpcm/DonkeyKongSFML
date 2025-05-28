@@ -33,11 +33,11 @@ int main() {
         enemyGroundColliders.push_back(c);
     }
 
-    BasicEnemy* enemyPtr = nullptr;
+    std::vector<std::unique_ptr<Enemy>> enemies;
     
 
-    if (!baseColliders.empty())
-        enemyPtr = new BasicEnemy(enemyGroundColliders[0]);
+    if (!enemyGroundColliders.empty())
+        enemies.push_back(std::make_unique<BasicEnemy>(enemyGroundColliders[0]));
 
     player.setLevel(&level);
 
@@ -57,13 +57,29 @@ int main() {
             activeBlockers = level.getLadderBlockersRects();
         }
 
-        player.update(deltaTime, baseColliders, ladders, activeBlockers);
-        enemyPtr->update(deltaTime, enemyGroundColliders);
+        player.update(deltaTime, baseColliders, ladders, activeBlockers, enemies);
+
+        for (auto& enemy : enemies) {
+            enemy->update(deltaTime, enemyGroundColliders);
+        }
+
+        // Eliminar enemigos muertos
+        enemies.erase(
+            std::remove_if(enemies.begin(), enemies.end(),
+                [](const std::unique_ptr<Enemy>& enemy) {
+                    return enemy->isDead();
+                }),
+            enemies.end()
+        );
 
         window.clear();
         level.draw(window);
         player.draw(window);
-        enemyPtr->draw(window);
+
+        for (auto& enemy : enemies) {
+            enemy->draw(window);
+        }
+
         window.display();
     }
 
