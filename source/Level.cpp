@@ -12,6 +12,22 @@ bool Level::loadFromFile(const std::string& tmxPath) {
     auto tileSize = map.getTileSize();
     auto mapSize = map.getTileCount();
 
+    tilesetTextures.clear();
+
+    for (const auto& tileset : map.getTilesets()) {
+        sf::Texture tex;
+        std::string base = "";
+        std::string fullPath = base + tileset.getImagePath();
+        if (tex.loadFromFile(fullPath)) {
+            tilesetTextures[tileset.getFirstGID()] = std::move(tex);
+            std::cout << "Cargado tileset: " << fullPath << "\n";
+        }
+        else {
+            std::cerr << "Error al cargar tileset: " << fullPath << "\n";
+        }
+    }
+
+
     for (const auto& layer : map.getLayers()) {
         if (!layer->getVisible()) continue;
 
@@ -61,34 +77,85 @@ bool Level::loadFromFile(const std::string& tmxPath) {
 }
 
 void Level::draw(sf::RenderWindow& window) const {
+    const auto& mapSize = map.getTileCount();
+    const auto& tileSize = map.getTileSize();
+
+    for (const auto& layer : map.getLayers()) {
+        if (layer->getType() != tmx::Layer::Type::Tile || !layer->getVisible())
+            continue;
+
+        const auto& tileLayer = layer->getLayerAs<tmx::TileLayer>();
+        const auto& tiles = tileLayer.getTiles();
+
+        for (std::size_t y = 0; y < mapSize.y; ++y) {
+            for (std::size_t x = 0; x < mapSize.x; ++x) {
+                std::size_t index = x + y * mapSize.x;
+                std::uint32_t tileID = tiles[index].ID;
+
+                if (tileID == 0) continue;
+
+                const sf::Texture* texture = nullptr;
+                std::size_t localID = tileID;
+
+                for (auto it = tilesetTextures.rbegin(); it != tilesetTextures.rend(); ++it) {
+                    if (tileID >= it->first) {
+                        texture = &it->second;
+                        localID = tileID - it->first;
+                        break;
+                    }
+                }
+
+                if (!texture) continue;
+
+                std::size_t columns = texture->getSize().x / tileSize.x;
+                std::size_t tu = localID % columns;
+                std::size_t tv = localID / columns;
+
+                sf::Sprite sprite;
+                sprite.setTexture(*texture);
+                sprite.setTextureRect({
+                    static_cast<int>(tu * tileSize.x),
+                    static_cast<int>(tv * tileSize.y),
+                    static_cast<int>(tileSize.x),
+                    static_cast<int>(tileSize.y)
+                    });
+                sprite.setPosition(static_cast<float>(x * tileSize.x),
+                    static_cast<float>(y * tileSize.y));
+
+                window.draw(sprite);
+            }
+        }
+    }
+
     sf::RectangleShape rect;
-    rect.setOutlineColor(sf::Color::Black);
+    rect.setOutlineColor(sf::Color::Red);
     rect.setOutlineThickness(1.f);
 
-    // Dibujar zonas de colisión (rojo)
-    rect.setFillColor(sf::Color(255, 0, 0, 100)); // rojo semi-transparente
+   /* rect.setFillColor(sf::Color(255, 0, 0, 100)); // colisiones
     for (const auto& box : collisionRects) {
         rect.setPosition(box.left, box.top);
         rect.setSize({ box.width, box.height });
         window.draw(rect);
     }
 
-    // Dibujar zonas de escaleras (verde)
-    rect.setFillColor(sf::Color(0, 255, 0, 100)); // verde semi-transparente
+    rect.setFillColor(sf::Color(0, 255, 0, 100)); // escaleras
     for (const auto& ladder : ladderRects) {
         rect.setPosition(ladder.left, ladder.top);
         rect.setSize({ ladder.width, ladder.height });
         window.draw(rect);
     }
 
-    // Dibujar zonas de colisión (rojo)
-    rect.setFillColor(sf::Color(255, 0, 0, 100)); // rojo semi-transparente
-    for (const auto& box : ladderBlockers) {
-        rect.setPosition(box.left, box.top);
-        rect.setSize({ box.width, box.height });
-        window.draw(rect);
-    }
+    if (ladderBlockersEnabled) {
+        rect.setFillColor(sf::Color(255, 0, 255, 100)); // blockers
+        for (const auto& lb : ladderBlockers) {
+            rect.setPosition(lb.left, lb.top);
+            rect.setSize({ lb.width, lb.height });
+            window.draw(rect);
+        }
+    }*/
 }
+
+
 
 const std::vector<sf::FloatRect>& Level::getCollisionRects() const {
     return collisionRects;

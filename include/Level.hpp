@@ -26,5 +26,7 @@ private:
 
     bool ladderBlockersEnabled = true;
 
+    mutable std::map<std::size_t, sf::Texture> tilesetTextures;
+
 
 };
