@@ -1,9 +1,10 @@
 #include "BarrelProjectile.h"
-#include <cstdlib> // rand
+#include <cstdlib>
 #include <ctime>
 #include <iostream>
 
-BarrelProjectile::BarrelProjectile(const sf::Vector2f& startPosition, const std::vector<sf::FloatRect>& groundColliders) {
+BarrelProjectile::BarrelProjectile(const sf::Vector2f& startPosition,
+    const std::vector<sf::FloatRect>& groundColliders) {
     shape.setSize({ 16.f, 16.f });
     shape.setFillColor(sf::Color::Yellow);
 
@@ -23,7 +24,8 @@ BarrelProjectile::BarrelProjectile(const sf::Vector2f& startPosition, const std:
     }
 
     shape.setPosition(pos);
-    std::srand(static_cast<unsigned>(std::time(nullptr))); 
+
+    std::srand(static_cast<unsigned>(std::time(nullptr)));
     direction = (std::rand() % 2 == 0) ? -1 : 1;
     velocityY = 0.f;
 }
@@ -31,11 +33,10 @@ BarrelProjectile::BarrelProjectile(const sf::Vector2f& startPosition, const std:
 void BarrelProjectile::update(float deltaTime,
     const std::vector<sf::FloatRect>& groundColliders,
     const std::vector<sf::FloatRect>&) {
-
     float dx = direction * horizontalSpeed * deltaTime;
     float dy = velocityY * deltaTime;
 
-    // Verificar colisión horizontal
+    // Movimiento horizontal
     sf::FloatRect boundsX = shape.getGlobalBounds();
     boundsX.left += dx;
     bool collidesX = false;
@@ -45,6 +46,7 @@ void BarrelProjectile::update(float deltaTime,
             break;
         }
     }
+
     if (collidesX) {
         direction *= -1;
     }
@@ -52,7 +54,7 @@ void BarrelProjectile::update(float deltaTime,
         shape.move(dx, 0.f);
     }
 
-    // Aplicar gravedad y verificar colisión vertical
+    // Movimiento vertical con gravedad
     velocityY += gravity * deltaTime;
     sf::FloatRect boundsY = shape.getGlobalBounds();
     boundsY.top += velocityY * deltaTime;
@@ -63,13 +65,13 @@ void BarrelProjectile::update(float deltaTime,
             break;
         }
     }
+
     if (collidesY) {
         velocityY = 0.f;
     }
     else {
         shape.move(0.f, velocityY * deltaTime);
     }
-
 }
 
 void BarrelProjectile::draw(sf::RenderWindow& window) const {

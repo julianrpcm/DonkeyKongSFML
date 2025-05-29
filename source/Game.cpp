@@ -23,7 +23,7 @@ Game::Game()
     player.setLevel(&level);
 
     if (!enemyGroundColliders.empty())
-        enemies.push_back(std::make_unique<BasicEnemy>(enemyGroundColliders[0]));
+        enemies.push_back(std::make_unique<BasicEnemy>(enemyGroundColliders[14]));
 
     bossPtr = std::make_unique<BossEnemy>(enemyGroundColliders[0]);
 
@@ -88,13 +88,21 @@ void Game::update(float deltaTime) {
         enemies.end()
     );
 
-    updateUI();
+    //Recoger monedas
+    for (auto& coin : coins) {
+        if (!coin.isCollected() && coin.getBounds().intersects(player.getBounds())) {
+            coin.collect();
+            scoreManager.addPoints(50);
+        }
+    }
 
     // Reiniciar nivel si jefe muere
     if (bossPtr->isDead()) {
         scoreManager.addPoints(500);
         restartLevel();
     }
+
+    updateUI();
 }
 
 void Game::render() {
@@ -103,10 +111,16 @@ void Game::render() {
     level.draw(window);
     player.draw(window);
     bossPtr->draw(window);
+    window.draw(levelText);
     window.draw(scoreText);
     for (auto& enemy : enemies) {
         enemy->draw(window);
     }
+
+    for (const auto& coin : coins) {
+        coin.draw(window);
+    }
+
 
     window.display();
 }
@@ -118,7 +132,32 @@ void Game::restartLevel() {
 
     enemies.clear();
     bossPtr = std::make_unique<BossEnemy>(enemyGroundColliders[0]);
-    // Aquí puedes volver a añadir enemigos, monedas, etc.
+    coins.clear();
+
+    {
+        auto enemy = std::make_unique<BasicEnemy>(enemyGroundColliders[14]);
+        enemy->setSpeed(enemySpeed);
+        enemies.push_back(std::move(enemy));
+    }
+    {
+        auto enemy = std::make_unique<BasicEnemy>(enemyGroundColliders[35]);
+        enemy->setSpeed(enemySpeed);
+        enemies.push_back(std::move(enemy));
+    }
+    {
+        auto enemy = std::make_unique<BasicEnemy>(enemyGroundColliders[21]);
+        enemy->setSpeed(enemySpeed);
+        enemies.push_back(std::move(enemy));
+    }
+
+    coins.emplace_back(sf::Vector2f(400.f, 300.f));
+    coins.emplace_back(sf::Vector2f(600.f, 200.f));
+    coins.emplace_back(sf::Vector2f(800.f, 400.f));
+
+    player.setPosition({
+        enemyGroundColliders[32].left,
+        enemyGroundColliders[32].top - player.getBounds().height
+        });
 }
 
 void Game::initUI()
@@ -128,15 +167,21 @@ void Game::initUI()
         return;
     }
 
+    levelText.setFont(font);
+    levelText.setCharacterSize(28);
+    levelText.setFillColor(sf::Color::White);
+    levelText.setPosition(20.f, 20.f);
+    levelText.setString("Level: 1");
+
     scoreText.setFont(font);
     scoreText.setCharacterSize(28);
     scoreText.setFillColor(sf::Color::White);
-    scoreText.setPosition(20.f, 20.f);
+    scoreText.setPosition(20.f, 60.f);
     scoreText.setString("Score: 0");
 }
 
 void Game::updateUI()
 {
     scoreText.setString("Score: " + std::to_string(scoreManager.getScore()));
-
+    levelText.setString("Level: " + std::to_string(currentLevel));
 }

@@ -13,6 +13,9 @@ BossEnemy::BossEnemy(const sf::FloatRect& platformCollider) {
 
     leftEdge = platformCollider.left;
     rightEdge = platformCollider.left + platformCollider.width;
+
+    direction = -1;
+
 }
 
 void BossEnemy::update(float deltaTime, const std::vector<sf::FloatRect>& groundColliders) {
@@ -20,21 +23,20 @@ void BossEnemy::update(float deltaTime, const std::vector<sf::FloatRect>& ground
 
     if (throwPauseTimer > 0.f) {
         throwPauseTimer -= deltaTime;
+        if (throwPauseTimer < 0.f)
+            throwPauseTimer = 0.f;
     }
     else {
         if (timer >= cooldown) {
             timer = 0.f;
             launchBarrel();
-            throwPauseTimer = throwPauseDuration; // Pausar tras lanzar
+            throwPauseTimer = throwPauseDuration;
         }
 
-        // Movimiento normal
         float dx = direction * speed * deltaTime;
         shape.move(dx, 0.f);
 
-        // Verificar suelo por delante según dirección
         sf::FloatRect footCheck = getFootCheck();
-  
         bool groundAhead = false;
         for (const auto& collider : groundColliders) {
             if (footCheck.intersects(collider)) {
@@ -42,18 +44,16 @@ void BossEnemy::update(float deltaTime, const std::vector<sf::FloatRect>& ground
                 break;
             }
         }
-
         if (!groundAhead) {
             direction *= -1;
         }
+
     }
 
-    // Actualizar proyectiles
     for (auto& p : projectiles) {
         p->update(deltaTime, groundColliders, currentLadders);
     }
 
-    // Eliminar barriles fuera de pantalla
     projectiles.erase(
         std::remove_if(projectiles.begin(), projectiles.end(),
             [](const std::unique_ptr<BarrelProjectile>& b) {
@@ -61,8 +61,6 @@ void BossEnemy::update(float deltaTime, const std::vector<sf::FloatRect>& ground
             }),
         projectiles.end()
     );
-
-    isThrowing = false;
 }
 
 void BossEnemy::draw(sf::RenderWindow& window) {
@@ -73,24 +71,20 @@ void BossEnemy::draw(sf::RenderWindow& window) {
     }
 }
 
-sf::FloatRect BossEnemy::getBounds() const
-{
+sf::FloatRect BossEnemy::getBounds() const {
     return shape.getGlobalBounds();
 }
 
-void BossEnemy::takeDamage(int damage)
-{
+void BossEnemy::takeDamage(int damage) {
     health -= damage;
     if (health < 0) health = 0;
 }
 
-void BossEnemy::setLadders(const std::vector<sf::FloatRect>& ladders)
-{
+void BossEnemy::setLadders(const std::vector<sf::FloatRect>& ladders) {
     currentLadders = ladders;
 }
 
-void BossEnemy::setGroundColliders(const std::vector<sf::FloatRect>& ground)
-{
+void BossEnemy::setGroundColliders(const std::vector<sf::FloatRect>& ground) {
     currentGround = ground;
 }
 
@@ -100,8 +94,8 @@ std::vector<std::unique_ptr<BarrelProjectile>>& BossEnemy::getProjectiles() {
 
 void BossEnemy::launchBarrel() {
     sf::Vector2f pos = shape.getPosition();
-    pos.x += (shape.getSize().x / 2.f) - 8.f; 
-    pos.y += shape.getSize().y - 1.f;              
+    pos.x += (shape.getSize().x / 2.f) - 8.f;
+    pos.y += shape.getSize().y - 1.f;
 
     projectiles.push_back(std::make_unique<BarrelProjectile>(pos, currentGround));
 }

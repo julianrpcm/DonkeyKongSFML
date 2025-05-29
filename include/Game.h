@@ -4,12 +4,14 @@
 #include <memory>
 #include <vector>
 #include <string>
+#include <list>
 
 #include "Level.h"
 #include "Player.h"
 #include "BasicEnemy.h"
 #include "BossEnemy.h"
 #include "ScoreManager.h"
+#include "Coin.h"
 
 class Game {
 public:
@@ -18,7 +20,10 @@ public:
 
     sf::Font font;
     sf::Text scoreText;
+    sf::Text levelText;
     ScoreManager scoreManager;
+
+    std::list<Coin> coins;
 
 private:
     std::string getProjectPath();
