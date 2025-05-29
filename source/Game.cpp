@@ -26,6 +26,8 @@ Game::Game()
         enemies.push_back(std::make_unique<BasicEnemy>(enemyGroundColliders[0]));
 
     bossPtr = std::make_unique<BossEnemy>(enemyGroundColliders[0]);
+
+    initUI();
 }
 
 std::string Game::getProjectPath() {
@@ -71,6 +73,12 @@ void Game::update(float deltaTime) {
     bossPtr->setGroundColliders(barrelGroundColliders);
     bossPtr->update(deltaTime, enemyGroundColliders);
 
+    //Score
+    for (const auto& enemy : enemies) {
+        if (enemy->isDead()) {
+            scoreManager.addPoints(100);
+        }
+    }
     // Eliminar enemigos muertos
     enemies.erase(
         std::remove_if(enemies.begin(), enemies.end(),
@@ -80,18 +88,22 @@ void Game::update(float deltaTime) {
         enemies.end()
     );
 
+    updateUI();
+
     // Reiniciar nivel si jefe muere
     if (bossPtr->isDead()) {
+        scoreManager.addPoints(500);
         restartLevel();
     }
 }
 
 void Game::render() {
+
     window.clear();
     level.draw(window);
     player.draw(window);
     bossPtr->draw(window);
-
+    window.draw(scoreText);
     for (auto& enemy : enemies) {
         enemy->draw(window);
     }
@@ -107,4 +119,24 @@ void Game::restartLevel() {
     enemies.clear();
     bossPtr = std::make_unique<BossEnemy>(enemyGroundColliders[0]);
     // Aquí puedes volver a añadir enemigos, monedas, etc.
+}
+
+void Game::initUI()
+{
+    if (!font.loadFromFile(getProjectPath() + "/assets/fonts/OpenSans-Regular.ttf")) {
+        std::cerr << "No se pudo cargar la fuente\n";
+        return;
+    }
+
+    scoreText.setFont(font);
+    scoreText.setCharacterSize(28);
+    scoreText.setFillColor(sf::Color::White);
+    scoreText.setPosition(20.f, 20.f);
+    scoreText.setString("Score: 0");
+}
+
+void Game::updateUI()
+{
+    scoreText.setString("Score: " + std::to_string(scoreManager.getScore()));
+
 }

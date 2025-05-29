@@ -9,11 +9,16 @@
 #include "Player.h"
 #include "BasicEnemy.h"
 #include "BossEnemy.h"
+#include "ScoreManager.h"
 
 class Game {
 public:
     Game();
     void run();
+
+    sf::Font font;
+    sf::Text scoreText;
+    ScoreManager scoreManager;
 
 private:
     std::string getProjectPath();
@@ -21,6 +26,9 @@ private:
     void update(float deltaTime);
     void render();
     void restartLevel();
+    void initUI();
+    void updateUI();
+
 
     sf::RenderWindow window;
     sf::Clock clock;
