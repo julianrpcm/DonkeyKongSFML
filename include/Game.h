@@ -12,6 +12,7 @@
 #include "BossEnemy.h"
 #include "ScoreManager.h"
 #include "Coin.h"
+#include "VenomEnemy.h"
 
 class Game {
 public:
@@ -42,6 +43,7 @@ private:
     Player player;
     std::vector<std::unique_ptr<Enemy>> enemies;
     std::unique_ptr<BossEnemy> bossPtr;
+    std::unique_ptr<VenomEnemy> venomEnemy;
 
     std::vector<sf::FloatRect> baseColliders;
     std::vector<sf::FloatRect> enemyGroundColliders;

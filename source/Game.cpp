@@ -5,7 +5,9 @@
 
 Game::Game()
     : window(sf::VideoMode(1280, 960), "Level Test") {
-    std::string tmxPath = getProjectPath() + "/assets/maps/world.tmx";
+
+    std::string rootPath = getProjectPath();
+    std::string tmxPath = rootPath + "/assets/maps/world.tmx";
 
     if (!level.loadFromFile(tmxPath)) {
         std::cerr << "Error loading level\n";
@@ -26,6 +28,15 @@ Game::Game()
         enemies.push_back(std::make_unique<BasicEnemy>(enemyGroundColliders[14]));
 
     bossPtr = std::make_unique<BossEnemy>(enemyGroundColliders[0]);
+    
+    sf::FloatRect base = enemyGroundColliders[35];
+    sf::Vector2f position = {
+        base.left + base.width / 2.f - 8.f,
+        base.top - 16.f
+    };
+
+    venomEnemy = std::make_unique<VenomEnemy>(position, getProjectPath());
+
 
     initUI();
 }
@@ -73,6 +84,16 @@ void Game::update(float deltaTime) {
     bossPtr->setGroundColliders(barrelGroundColliders);
     bossPtr->update(deltaTime, enemyGroundColliders);
 
+    if (venomEnemy) {
+        venomEnemy->update(deltaTime, enemyGroundColliders);
+
+        for (const auto& venom : venomEnemy->getProjectiles()) {
+            if (!venom->isExpired() && venom->getBounds().intersects(player.getBounds())) {
+                player.die();
+            }
+        }
+    }
+
     //Score
     for (const auto& enemy : enemies) {
         if (enemy->isDead()) {
@@ -90,11 +111,14 @@ void Game::update(float deltaTime) {
 
     //Recoger monedas
     for (auto& coin : coins) {
+        coin.update(deltaTime);
+
         if (!coin.isCollected() && coin.getBounds().intersects(player.getBounds())) {
             coin.collect();
             scoreManager.addPoints(50);
         }
     }
+
 
     // Reiniciar nivel si jefe muere
     if (bossPtr->isDead()) {
@@ -111,6 +135,7 @@ void Game::render() {
     level.draw(window);
     player.draw(window);
     bossPtr->draw(window);
+    venomEnemy->draw(window);
     window.draw(levelText);
     window.draw(scoreText);
     for (auto& enemy : enemies) {
@@ -126,6 +151,7 @@ void Game::render() {
 }
 
 void Game::restartLevel() {
+    std::string projectPath = getProjectPath();
     currentLevel++;
     enemySpeed *= 1.2f;
     spawnDelay *= 0.85f;
@@ -150,9 +176,17 @@ void Game::restartLevel() {
         enemies.push_back(std::move(enemy));
     }
 
-    coins.emplace_back(sf::Vector2f(400.f, 300.f));
-    coins.emplace_back(sf::Vector2f(600.f, 200.f));
-    coins.emplace_back(sf::Vector2f(800.f, 400.f));
+    sf::FloatRect base = enemyGroundColliders[35];
+    sf::Vector2f position = {
+        base.left + base.width / 2.f - 8.f,
+        base.top - 16.f
+    };
+
+    venomEnemy = std::make_unique<VenomEnemy>(position, getProjectPath());
+
+    coins.emplace_back(sf::Vector2f(400.f, 300.f), projectPath);
+    coins.emplace_back(sf::Vector2f(600.f, 200.f), projectPath);
+    coins.emplace_back(sf::Vector2f(800.f, 400.f), projectPath);
 
     player.setPosition({
         enemyGroundColliders[32].left,
