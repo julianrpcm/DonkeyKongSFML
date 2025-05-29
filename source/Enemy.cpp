@@ -1,4 +1,4 @@
-#include "Enemy.hpp"
+#include "Enemy.h"
 #include <iostream>
 
 void Enemy::takeDamage(int damage) {
@@ -14,9 +14,9 @@ bool Enemy::isDead() const {
 }
 
 sf::Vector2f Enemy::getPosition() const {
-    return sprite.getPosition();
+    return shape.getPosition();
 }
 
 void Enemy::setPosition(const sf::Vector2f& pos) {
-    sprite.setPosition(pos);
+    shape.setPosition(pos);
 }

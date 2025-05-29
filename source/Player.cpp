@@ -1,6 +1,8 @@
-#include "Player.hpp"
-#include "Level.hpp"
-#include "Enemy.hpp"
+#include "Player.h"
+#include "Level.h"
+#include "Enemy.h"
+#include "BossEnemy.h"
+#include <iostream>
 
 Player::Player() {
     shape.setSize({ 24.f, 24.f });
@@ -8,7 +10,11 @@ Player::Player() {
     shape.setPosition(100.f, 100.f);
 }
 
-void Player::update(float dt, const std::vector<sf::FloatRect>& colliders, const std::vector<sf::FloatRect>& ladders, const std::vector<sf::FloatRect>& laddersBlockers, std::vector<std::unique_ptr<Enemy>>& enemies) {
+void Player::update(float dt, const std::vector<sf::FloatRect>& colliders, const std::vector<sf::FloatRect>& ladders, const std::vector<sf::FloatRect>& laddersBlockers, std::vector<std::unique_ptr<Enemy>>& enemies, BossEnemy* boss) {
+    
+    if (!alive)
+        return;
+    
     // Movimiento horizontal
     velocity.x = 0.f;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
@@ -76,6 +82,7 @@ void Player::update(float dt, const std::vector<sf::FloatRect>& colliders, const
         handleCollision(allColliders);
 
     handleEnemyCollisions(enemies);
+    handleBossProjectiles(boss);
 
 }
 
@@ -145,7 +152,37 @@ void Player::handleEnemyCollisions(std::vector<std::unique_ptr<Enemy>>& enemies)
                 enemy->takeDamage(100);
                 velocity.y = -200.f; // rebote
             }
-            // Si quieres que el jugador reciba daño al tocarlo lateralmente, podrías añadirlo aquí
+            else {
+                die();
+            }
+        }
+    }
+
+}
+
+
+bool Player::isAlive() const
+{
+    return alive;
+}
+
+void Player::die()
+{
+    if (!alive)
+        return;
+
+    alive = false;
+    std::cout << "El jugador ha muerto\n";
+}
+
+
+void Player::handleBossProjectiles(BossEnemy* boss)
+{
+    if (!boss) return;
+
+    for (const auto& barrel : boss->getProjectiles()) {
+        if (barrel->getBounds().intersects(getBounds())) {
+            die();
         }
     }
 }

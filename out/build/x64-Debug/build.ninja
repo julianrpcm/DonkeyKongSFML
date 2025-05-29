@@ -49,7 +49,23 @@ cmake_ninja_workdir = C$:\Users\Julian\source\repos\DonkeyKongSFML\out\build\x64
 
 build cmake_object_order_depends_target_DonkeyKongSFML: phony || cmake_object_order_depends_target_tmxlite
 
+build CMakeFiles\DonkeyKongSFML.dir\source\BarrelProjectile.cpp.obj: CXX_COMPILER__DonkeyKongSFML_unscanned_Debug C$:\Users\Julian\source\repos\DonkeyKongSFML\source\BarrelProjectile.cpp || cmake_object_order_depends_target_DonkeyKongSFML
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++17
+  INCLUDES = -IC:\Users\Julian\source\repos\DonkeyKongSFML\include -IC:\Users\Julian\source\repos\DonkeyKongSFML\external\tmxlite\include -external:IC:\Users\Julian\SFML\include -external:W0
+  OBJECT_DIR = CMakeFiles\DonkeyKongSFML.dir
+  OBJECT_FILE_DIR = CMakeFiles\DonkeyKongSFML.dir\source
+  TARGET_COMPILE_PDB = CMakeFiles\DonkeyKongSFML.dir\
+  TARGET_PDB = DonkeyKongSFML.pdb
+
 build CMakeFiles\DonkeyKongSFML.dir\source\BasicEnemy.cpp.obj: CXX_COMPILER__DonkeyKongSFML_unscanned_Debug C$:\Users\Julian\source\repos\DonkeyKongSFML\source\BasicEnemy.cpp || cmake_object_order_depends_target_DonkeyKongSFML
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++17
+  INCLUDES = -IC:\Users\Julian\source\repos\DonkeyKongSFML\include -IC:\Users\Julian\source\repos\DonkeyKongSFML\external\tmxlite\include -external:IC:\Users\Julian\SFML\include -external:W0
+  OBJECT_DIR = CMakeFiles\DonkeyKongSFML.dir
+  OBJECT_FILE_DIR = CMakeFiles\DonkeyKongSFML.dir\source
+  TARGET_COMPILE_PDB = CMakeFiles\DonkeyKongSFML.dir\
+  TARGET_PDB = DonkeyKongSFML.pdb
+
+build CMakeFiles\DonkeyKongSFML.dir\source\BossEnemy.cpp.obj: CXX_COMPILER__DonkeyKongSFML_unscanned_Debug C$:\Users\Julian\source\repos\DonkeyKongSFML\source\BossEnemy.cpp || cmake_object_order_depends_target_DonkeyKongSFML
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++17
   INCLUDES = -IC:\Users\Julian\source\repos\DonkeyKongSFML\include -IC:\Users\Julian\source\repos\DonkeyKongSFML\external\tmxlite\include -external:IC:\Users\Julian\SFML\include -external:W0
   OBJECT_DIR = CMakeFiles\DonkeyKongSFML.dir
@@ -97,7 +113,7 @@ build CMakeFiles\DonkeyKongSFML.dir\source\main.cpp.obj: CXX_COMPILER__DonkeyKon
 #############################################
 # Link the executable DonkeyKongSFML.exe
 
-build DonkeyKongSFML.exe: CXX_EXECUTABLE_LINKER__DonkeyKongSFML_Debug CMakeFiles\DonkeyKongSFML.dir\source\BasicEnemy.cpp.obj CMakeFiles\DonkeyKongSFML.dir\source\Enemy.cpp.obj CMakeFiles\DonkeyKongSFML.dir\source\Level.cpp.obj CMakeFiles\DonkeyKongSFML.dir\source\Player.cpp.obj CMakeFiles\DonkeyKongSFML.dir\source\main.cpp.obj | external\tmxlite\tmxlite-d.lib C$:\Users\Julian\SFML\lib\sfml-graphics-d.lib C$:\Users\Julian\SFML\lib\sfml-window-d.lib C$:\Users\Julian\SFML\lib\sfml-system-d.lib || external\tmxlite\tmxlite-d.dll
+build DonkeyKongSFML.exe: CXX_EXECUTABLE_LINKER__DonkeyKongSFML_Debug CMakeFiles\DonkeyKongSFML.dir\source\BarrelProjectile.cpp.obj CMakeFiles\DonkeyKongSFML.dir\source\BasicEnemy.cpp.obj CMakeFiles\DonkeyKongSFML.dir\source\BossEnemy.cpp.obj CMakeFiles\DonkeyKongSFML.dir\source\Enemy.cpp.obj CMakeFiles\DonkeyKongSFML.dir\source\Level.cpp.obj CMakeFiles\DonkeyKongSFML.dir\source\Player.cpp.obj CMakeFiles\DonkeyKongSFML.dir\source\main.cpp.obj | external\tmxlite\tmxlite-d.lib C$:\Users\Julian\SFML\lib\sfml-graphics-d.lib C$:\Users\Julian\SFML\lib\sfml-window-d.lib C$:\Users\Julian\SFML\lib\sfml-system-d.lib || external\tmxlite\tmxlite-d.dll
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = external\tmxlite\tmxlite-d.lib  C:\Users\Julian\SFML\lib\sfml-graphics-d.lib  C:\Users\Julian\SFML\lib\sfml-window-d.lib  C:\Users\Julian\SFML\lib\sfml-system-d.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib

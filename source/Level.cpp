@@ -1,4 +1,4 @@
-#include "Level.hpp"
+#include "Level.h"
 #include <tmxlite/TileLayer.hpp>
 #include <tmxlite/ObjectGroup.hpp>
 #include <iostream>
@@ -130,6 +130,14 @@ void Level::draw(sf::RenderWindow& window) const {
     sf::RectangleShape rect;
     rect.setOutlineColor(sf::Color::Red);
     rect.setOutlineThickness(1.f);
+
+   /* for (const auto& r : getCollisionRects()) {
+        sf::RectangleShape debugRect({ r.width, r.height });
+        debugRect.setPosition(r.left, r.top);
+        debugRect.setFillColor(sf::Color(255, 255, 0, 100)); // amarillo translúcido
+        window.draw(debugRect);
+    }*/
+
 
    /* rect.setFillColor(sf::Color(255, 0, 0, 100)); // colisiones
     for (const auto& box : collisionRects) {

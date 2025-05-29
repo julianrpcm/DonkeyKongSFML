@@ -1,8 +1,9 @@
 #include <filesystem>
 #include <iostream>
-#include "Level.hpp"
-#include "Player.hpp"
-#include "BasicEnemy.hpp"
+#include "Level.h"
+#include "Player.h"
+#include "BasicEnemy.h"
+#include <BossEnemy.h>
 
 std::string getProjectPath() {
     auto path = std::filesystem::current_path(); // Comienza en build/Debug
@@ -13,7 +14,7 @@ std::string getProjectPath() {
 }
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(1280, 960), "Level Test");
+    sf::RenderWindow window(sf::VideoMode(1280, 1080), "Level Test");
     Level level;
     Player player;
     sf::Clock clock;
@@ -24,6 +25,11 @@ int main() {
         return 1;
 
     const auto& baseColliders = level.getCollisionRects();
+    const auto& ladders = level.getLadderRects();
+    const auto& ladderBlockers = level.getLadderBlockersRects();
+
+
+    std::vector<sf::FloatRect> barrelGroundColliders = baseColliders;
     std::vector<sf::FloatRect> enemyGroundColliders;
 
     for (const auto& c : level.getCollisionRects()) {
@@ -34,6 +40,8 @@ int main() {
     }
 
     std::vector<std::unique_ptr<Enemy>> enemies;
+    std::unique_ptr<BossEnemy> bossPtr = std::make_unique<BossEnemy>(enemyGroundColliders[0]);
+
     
 
     if (!enemyGroundColliders.empty())
@@ -57,11 +65,15 @@ int main() {
             activeBlockers = level.getLadderBlockersRects();
         }
 
-        player.update(deltaTime, baseColliders, ladders, activeBlockers, enemies);
+        player.update(deltaTime, baseColliders, ladders, activeBlockers, enemies, bossPtr.get());
 
         for (auto& enemy : enemies) {
             enemy->update(deltaTime, enemyGroundColliders);
         }
+
+        bossPtr->setLadders(ladders);
+        bossPtr->setGroundColliders(barrelGroundColliders);
+        bossPtr->update(deltaTime, enemyGroundColliders);
 
         // Eliminar enemigos muertos
         enemies.erase(
@@ -75,6 +87,7 @@ int main() {
         window.clear();
         level.draw(window);
         player.draw(window);
+        bossPtr->draw(window);
 
         for (auto& enemy : enemies) {
             enemy->draw(window);

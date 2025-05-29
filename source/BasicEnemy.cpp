@@ -1,4 +1,4 @@
-#include "BasicEnemy.hpp"
+#include "BasicEnemy.h"
 #include <iostream>
 
 BasicEnemy::BasicEnemy(const sf::FloatRect& platformCollider)
@@ -19,21 +19,7 @@ BasicEnemy::BasicEnemy(const sf::FloatRect& platformCollider)
 
 void BasicEnemy::update(float deltaTime, const std::vector<sf::FloatRect>& groundColliders) {
     
-    sf::FloatRect footCheck;
-    if (direction == -1) {
-        footCheck = {
-            shape.getPosition().x - 1.f,
-            shape.getPosition().y + shape.getSize().y,
-            2.f, 2.f
-        };
-    }
-    else {
-        footCheck = {
-            shape.getPosition().x + shape.getSize().x + 1.f,
-            shape.getPosition().y + shape.getSize().y,
-            2.f, 2.f
-        };
-    }
+    sf::FloatRect footCheck = getFootCheck();
 
     bool groundAhead = false;
 
