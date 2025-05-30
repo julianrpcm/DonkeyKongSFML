@@ -1,7 +1,9 @@
 #include "BossEnemy.h"
 #include <iostream>
 
-BossEnemy::BossEnemy(const sf::FloatRect& platformCollider) {
+BossEnemy::BossEnemy(const sf::FloatRect& platformCollider, const std::string& projectPath) 
+    : projectPath(projectPath)
+{
     health = 100;
 
     shape.setSize({ 24.f, 24.f });
@@ -97,5 +99,5 @@ void BossEnemy::launchBarrel() {
     pos.x += (shape.getSize().x / 2.f) - 8.f;
     pos.y += shape.getSize().y - 1.f;
 
-    projectiles.push_back(std::make_unique<BarrelProjectile>(pos, currentGround));
+    projectiles.push_back(std::make_unique<BarrelProjectile>(pos, currentGround, projectPath));
 }

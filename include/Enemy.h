@@ -15,10 +15,24 @@ public:
     bool isDead() const;
     sf::Vector2f getPosition() const;
     void setPosition(const sf::Vector2f& pos);
+    virtual void updateAnimation(float deltaTime);
+
 
 protected:
     sf::RectangleShape shape;
+
     sf::Sprite sprite;
+    sf::Texture texture;
+    sf::IntRect currentFrame;
+    float animationTimer = 0.f;
+    int frameIndex = 0;
+    int frameCount = 1;
+    float frameWidth = 32.f;
+    float frameHeight = 32.f;
+    float animationSpeed = 0.1f;
+    float visualScale = 1.f;
+
+
     int direction = -1;
     int health = 100;
 
@@ -27,8 +41,10 @@ protected:
         const float footHeight = 2.f;
         const float offsetY = 2.f;
 
-        float x = shape.getPosition().x + shape.getSize().x / 2.f - footWidth / 2.f;
-        float y = shape.getPosition().y + shape.getSize().y + offsetY;
+        sf::FloatRect spriteBounds = sprite.getGlobalBounds();
+
+        float x = sprite.getPosition().x + spriteBounds.width / 2.f - footWidth / 2.f;
+        float y = sprite.getPosition().y + spriteBounds.height + offsetY;
 
         return { x, y, footWidth, footHeight };
     }

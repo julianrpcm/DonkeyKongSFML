@@ -4,9 +4,20 @@
 #include <iostream>
 
 BarrelProjectile::BarrelProjectile(const sf::Vector2f& startPosition,
-    const std::vector<sf::FloatRect>& groundColliders) {
-    shape.setSize({ 16.f, 16.f });
-    shape.setFillColor(sf::Color::Yellow);
+    const std::vector<sf::FloatRect>& groundColliders,
+    const std::string& projectPath) {
+
+    for (int i = 1; i <= 8; ++i) {
+        sf::Texture texture;
+        if (!texture.loadFromFile(projectPath + "/assets/sprites/Barrel/" + std::to_string(i) + ".png")) {
+            std::cerr << "Failed to load barrel frame: " << i << "\n";
+        }
+        textures.push_back(texture);
+    }
+
+    sprite.setTexture(textures[0]);
+    sprite.setScale(1.f, 1.f);
+    sprite.setOrigin(0.f, 0.f);
 
     sf::Vector2f pos = startPosition;
     float closestY = 10000.f;
@@ -20,10 +31,11 @@ BarrelProjectile::BarrelProjectile(const sf::Vector2f& startPosition,
     }
 
     if (closestY != 10000.f) {
-        pos.y = closestY - shape.getSize().y;
+        pos.y = closestY - textures[0].getSize().y;
     }
 
-    shape.setPosition(pos);
+    sprite.setPosition(pos);
+    updateHitboxPosition();
 
     std::srand(static_cast<unsigned>(std::time(nullptr)));
     direction = (std::rand() % 2 == 0) ? -1 : 1;
@@ -36,8 +48,15 @@ void BarrelProjectile::update(float deltaTime,
     float dx = direction * horizontalSpeed * deltaTime;
     float dy = velocityY * deltaTime;
 
+    animationTimer += deltaTime;
+    if (animationTimer >= frameDuration) {
+        animationTimer = 0.f;
+        currentFrame = (currentFrame + 1) % textures.size();
+        sprite.setTexture(textures[currentFrame]);
+    }
+
     // Movimiento horizontal
-    sf::FloatRect boundsX = shape.getGlobalBounds();
+    sf::FloatRect boundsX = sprite.getGlobalBounds();
     boundsX.left += dx;
     bool collidesX = false;
     for (const auto& rect : groundColliders) {
@@ -51,12 +70,12 @@ void BarrelProjectile::update(float deltaTime,
         direction *= -1;
     }
     else {
-        shape.move(dx, 0.f);
+        sprite.move(dx, 0.f);
     }
 
     // Movimiento vertical con gravedad
     velocityY += gravity * deltaTime;
-    sf::FloatRect boundsY = shape.getGlobalBounds();
+    sf::FloatRect boundsY = sprite.getGlobalBounds();
     boundsY.top += velocityY * deltaTime;
     bool collidesY = false;
     for (const auto& rect : groundColliders) {
@@ -70,19 +89,55 @@ void BarrelProjectile::update(float deltaTime,
         velocityY = 0.f;
     }
     else {
-        shape.move(0.f, velocityY * deltaTime);
+        sprite.move(0.f, velocityY * deltaTime);
     }
+
+    sprite.setScale(direction > 0 ? 1.f : -1.f, 1.f);
+    updateHitboxPosition();
 }
 
-void BarrelProjectile::draw(sf::RenderWindow& window) const {
-    window.draw(shape);
+void BarrelProjectile::draw(sf::RenderWindow& window){
+    window.draw(sprite);
+
+    // DEBUG: dibujar hitbox
+    hitbox.setFillColor(sf::Color::Transparent);
+    hitbox.setOutlineColor(sf::Color::Red);
+    hitbox.setOutlineThickness(1.f);
+    window.draw(hitbox);
+
+    sf::FloatRect local = sprite.getLocalBounds();
+
+    sf::RectangleShape spriteBox;
+    spriteBox.setSize({ local.width, local.height });
+    spriteBox.setOrigin(sprite.getOrigin());
+    spriteBox.setPosition(sprite.getPosition());
+    spriteBox.setScale(sprite.getScale()); // aplica reflejo
+    spriteBox.setFillColor(sf::Color::Transparent);
+    spriteBox.setOutlineColor(sf::Color::Blue); // Azul = sprite lógico
+    spriteBox.setOutlineThickness(1.f);
+    window.draw(spriteBox);
+
 }
 
 sf::FloatRect BarrelProjectile::getBounds() const {
-    return shape.getGlobalBounds();
+    return hitbox.getGlobalBounds();
 }
 
 bool BarrelProjectile::isOffScreen() const {
-    sf::Vector2f pos = shape.getPosition();
+    sf::Vector2f pos = sprite.getPosition();
     return pos.y > 1000.f || pos.x < -50.f || pos.x > 1500.f;
+}
+
+void BarrelProjectile::updateHitboxPosition() {
+    sf::FloatRect spriteBounds = sprite.getGlobalBounds();
+
+    float desiredWidth = spriteBounds.width - 35.f;
+    float desiredHeight = spriteBounds.height - 30.f;
+
+    hitbox.setSize({ desiredWidth, desiredHeight });
+
+    hitbox.setPosition({
+        spriteBounds.left + (spriteBounds.width - desiredWidth) / 2.f,
+        spriteBounds.top + (spriteBounds.height - desiredHeight)
+        });
 }

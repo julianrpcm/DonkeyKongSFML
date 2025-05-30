@@ -7,7 +7,7 @@
 
 class BossEnemy : public Enemy {
 public:
-    explicit BossEnemy(const sf::FloatRect& platformCollider);
+    explicit BossEnemy(const sf::FloatRect& platformCollider, const std::string& projectPath);
 
     void update(float deltaTime, const std::vector<sf::FloatRect>& groundColliders) override;
     void draw(sf::RenderWindow& window) override;
@@ -35,4 +35,6 @@ private:
     std::vector<sf::FloatRect> currentLadders;
     std::vector<sf::FloatRect> currentGround;
     std::vector<std::unique_ptr<BarrelProjectile>> projectiles;
+    std::string projectPath;
+
 };

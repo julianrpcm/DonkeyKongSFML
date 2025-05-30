@@ -25,9 +25,9 @@ Game::Game()
     player.setLevel(&level);
 
     if (!enemyGroundColliders.empty())
-        enemies.push_back(std::make_unique<BasicEnemy>(enemyGroundColliders[14]));
+        enemies.push_back(std::make_unique<BasicEnemy>(enemyGroundColliders[14], getProjectPath()));
 
-    bossPtr = std::make_unique<BossEnemy>(enemyGroundColliders[0]);
+    bossPtr = std::make_unique<BossEnemy>(enemyGroundColliders[0], getProjectPath());
     
     sf::FloatRect base = enemyGroundColliders[35];
     sf::Vector2f position = {
@@ -157,21 +157,21 @@ void Game::restartLevel() {
     spawnDelay *= 0.85f;
 
     enemies.clear();
-    bossPtr = std::make_unique<BossEnemy>(enemyGroundColliders[0]);
+    bossPtr = std::make_unique<BossEnemy>(enemyGroundColliders[0], getProjectPath());
     coins.clear();
 
     {
-        auto enemy = std::make_unique<BasicEnemy>(enemyGroundColliders[14]);
+        auto enemy = std::make_unique<BasicEnemy>(enemyGroundColliders[14], getProjectPath());
         enemy->setSpeed(enemySpeed);
         enemies.push_back(std::move(enemy));
     }
     {
-        auto enemy = std::make_unique<BasicEnemy>(enemyGroundColliders[35]);
+        auto enemy = std::make_unique<BasicEnemy>(enemyGroundColliders[35], getProjectPath());
         enemy->setSpeed(enemySpeed);
         enemies.push_back(std::move(enemy));
     }
     {
-        auto enemy = std::make_unique<BasicEnemy>(enemyGroundColliders[21]);
+        auto enemy = std::make_unique<BasicEnemy>(enemyGroundColliders[21], getProjectPath());
         enemy->setSpeed(enemySpeed);
         enemies.push_back(std::move(enemy));
     }
