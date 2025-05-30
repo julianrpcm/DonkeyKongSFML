@@ -19,6 +19,8 @@ public:
 
     std::vector<std::unique_ptr<BarrelProjectile>>& getProjectiles();
 
+    void updateHitboxPosition();
+
 private:
     void launchBarrel();
 

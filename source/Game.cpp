@@ -4,7 +4,7 @@
 #include <algorithm>
 
 Game::Game()
-    : window(sf::VideoMode(1280, 960), "Level Test") {
+    : window(sf::VideoMode(1280, 1024), "Level Test") {
 
     std::string rootPath = getProjectPath();
     std::string tmxPath = rootPath + "/assets/maps/world.tmx";

@@ -19,6 +19,9 @@ public:
     bool isOffScreen() const;
     void updateHitboxPosition();
 
+protected:
+   const float visualScale = 0.8f;
+
 private:
     sf::RectangleShape hitbox;
     sf::Sprite sprite;

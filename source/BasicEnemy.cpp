@@ -75,7 +75,7 @@ void BasicEnemy::draw(sf::RenderWindow& window) {
     window.draw(sprite);
 
     // DEBUG: dibuja la hitbox en rojo transparente
-    shape.setFillColor(sf::Color::Transparent);
+   /* shape.setFillColor(sf::Color::Transparent);
     shape.setOutlineColor(sf::Color::Red);
     shape.setOutlineThickness(1.f);
     window.draw(shape);
@@ -85,7 +85,7 @@ void BasicEnemy::draw(sf::RenderWindow& window) {
     spriteBox.setFillColor(sf::Color::Transparent);
     spriteBox.setOutlineColor(sf::Color::Blue);
     spriteBox.setOutlineThickness(1.f);
-    window.draw(spriteBox);
+    window.draw(spriteBox);*/
 
 }
 

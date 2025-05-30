@@ -16,7 +16,7 @@ BarrelProjectile::BarrelProjectile(const sf::Vector2f& startPosition,
     }
 
     sprite.setTexture(textures[0]);
-    sprite.setScale(1.f, 1.f);
+    sprite.setScale(visualScale, -visualScale);
     sprite.setOrigin(0.f, 0.f);
 
     sf::Vector2f pos = startPosition;
@@ -56,11 +56,16 @@ void BarrelProjectile::update(float deltaTime,
     }
 
     // Movimiento horizontal
-    sf::FloatRect boundsX = sprite.getGlobalBounds();
+    sf::FloatRect boundsX = hitbox.getGlobalBounds();
     boundsX.left += dx;
+
+    sf::FloatRect boundsYOnly = hitbox.getGlobalBounds();
+    boundsYOnly.top += velocityY * deltaTime;
+
     bool collidesX = false;
+
     for (const auto& rect : groundColliders) {
-        if (boundsX.intersects(rect)) {
+        if (boundsX.intersects(rect) && !boundsYOnly.intersects(rect)) {
             collidesX = true;
             break;
         }
@@ -71,13 +76,17 @@ void BarrelProjectile::update(float deltaTime,
     }
     else {
         sprite.move(dx, 0.f);
+        updateHitboxPosition();
     }
 
     // Movimiento vertical con gravedad
     velocityY += gravity * deltaTime;
-    sf::FloatRect boundsY = sprite.getGlobalBounds();
+    sf::FloatRect boundsY = hitbox.getGlobalBounds();
+
     boundsY.top += velocityY * deltaTime;
+
     bool collidesY = false;
+
     for (const auto& rect : groundColliders) {
         if (boundsY.intersects(rect)) {
             collidesY = true;
@@ -90,10 +99,11 @@ void BarrelProjectile::update(float deltaTime,
     }
     else {
         sprite.move(0.f, velocityY * deltaTime);
+        updateHitboxPosition();
     }
 
-    sprite.setScale(direction > 0 ? 1.f : -1.f, 1.f);
-    updateHitboxPosition();
+    sprite.setScale(direction > 0 ? visualScale : -visualScale, -visualScale);
+    //updateHitboxPosition();
 }
 
 void BarrelProjectile::draw(sf::RenderWindow& window){
