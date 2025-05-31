@@ -33,7 +33,7 @@ public:
 
     void loadTexture(const std::string& projectPath);
     bool hasDeathAnimationFinished() const;
-
+    void reset(const sf::Vector2f& startPos);
 
     enum class PlayerState {
         Idle,

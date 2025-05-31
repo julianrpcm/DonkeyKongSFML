@@ -259,6 +259,20 @@ bool Player::hasDeathAnimationFinished() const
     return state == PlayerState::Dead && currentFrame >= DEAD_MAX_FRAMES - 1;
 }
 
+void Player::reset(const sf::Vector2f& startPos)
+{
+    alive = true;
+    state = PlayerState::Idle;
+    currentFrame = 0;
+    animationTimer = 0.f;
+    velocity = { 0.f, 0.f };
+    onGround = false;
+    onLadder = false;
+
+    hitbox.setPosition(startPos);
+    sprite.setPosition(hitbox.getPosition());
+}
+
 void Player::updateAnimation(float dt)
 {
     int row = 0;
@@ -267,19 +281,19 @@ void Player::updateAnimation(float dt)
     switch (state) {
     case PlayerState::Idle:
         row = IDLE_ROW; 
-        maxFrames = 4;      
+        maxFrames = 3;      
         break;
     case PlayerState::Walk:
         row = WALK_ROW;    
-        maxFrames = 6;     
+        maxFrames = 5;     
         break;
     case PlayerState::Jump:
         row = JUMP_ROW;
-        maxFrames = 6;
+        maxFrames = 5;
         break;
     case PlayerState::Climb:
         row = CLIMB_ROW;
-        maxFrames = 8;
+        maxFrames = 7;
         break;
     case PlayerState::Dead:
         row = DEAD_ROW;
