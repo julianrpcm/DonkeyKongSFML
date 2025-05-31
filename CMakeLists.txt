@@ -3,33 +3,38 @@ project(DonkeyKongSFML)
 
 # Estándar mínimo de C++
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Incluir headers desde carpeta include/
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
+# Archivos fuente principales
 file(GLOB SOURCES "source/*.cpp")
 
+# Incluir tmxlite como submódulo
 set(TMXLITE_STATIC_LIB ON CACHE BOOL "Build tmxlite as static library")
-
 add_subdirectory(external/tmxlite)
-add_executable(${PROJECT_NAME} ${SOURCES} ${TMXLITE_SRC} ${PUGIXML_SRC} "source/Enemy.cpp"  "source/BasicEnemy.cpp" "source/BossEnemy.cpp" "source/BarrelProjectile.cpp" "include/ScoreManager.h" "source/ScoreManager.cpp" "include/Game.h" "source/Game.cpp" "include/Coin.h" "source/Coin.cpp" "include/VenomEnemy.h" "include/Venom.h" "source/Venom.cpp" "source/VenomEnemy.cpp")
-# Crear el ejecutable con los archivos fuente
 
+# Si usas pugixml también como fuente externa:
+# set(PUGIXML_SRC "") # define si lo usas directamente
 
-# Si SFML no está en variables del sistema, indicá rutas manualmente:
-# (Modificá estas rutas si es necesario según donde tengas SFML)
-
-# set(SFML_ROOT "C:\Users\Julian\SFML")
-
-# Buscar la librería SFML
+# Buscar SFML instalado
 set(SFML_DIR "C:/Users/Julian/SFML/lib/cmake/SFML")
 find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 
-# Enlazar SFML al ejecutable
+# Crear el ejecutable
+add_executable(${PROJECT_NAME}
+    ${SOURCES}
+    ${TMXLITE_SRC}  # opcional si tmxlite necesita fuentes explícitas
+    ${PUGIXML_SRC}  # opcional si pugixml necesita fuentes explícitas
+)
+
+# Enlazar bibliotecas necesarias
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     tmxlite
     sfml-graphics sfml-window sfml-system
 )
 
+# Copiar assets automáticamente al directorio de build (opcional pero recomendable)
+file(COPY assets/ DESTINATION ${CMAKE_BINARY_DIR}/assets)
