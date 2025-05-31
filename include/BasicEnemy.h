@@ -10,9 +10,17 @@ public:
     sf::FloatRect getBounds() const override;
     void setSpeed(float s);
     void updateHitboxPosition();
+    void takeDamage(int damage) override;
+
+
+    enum class BasicEnemyState { Walking, Dying, Dead };
+    BasicEnemyState state = BasicEnemyState::Walking;
+
+    sf::Texture deadTexture;
 
 private:
     float speed = 50.f;
     float leftEdge;
     float rightEdge;
+
 };

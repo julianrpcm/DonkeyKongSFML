@@ -96,15 +96,16 @@ void Game::update(float deltaTime) {
 
     //Score
     for (const auto& enemy : enemies) {
-        if (enemy->isDead()) {
+        if (enemy->shouldGiveScore()) {
             scoreManager.addPoints(100);
+            enemy->hasGivenScore = true;
         }
     }
     // Eliminar enemigos muertos
     enemies.erase(
         std::remove_if(enemies.begin(), enemies.end(),
             [](const std::unique_ptr<Enemy>& enemy) {
-                return enemy->isDead();
+                return enemy->canBeRemoved();
             }),
         enemies.end()
     );
@@ -120,9 +121,13 @@ void Game::update(float deltaTime) {
     }
 
 
-    // Reiniciar nivel si jefe muere
-    if (bossPtr->isDead()) {
+    if (bossPtr && bossPtr->shouldGiveScore()) {
         scoreManager.addPoints(500);
+        bossPtr->hasGivenScore = true;
+    }
+
+    // Reiniciar nivel si jefe muere
+    if (bossPtr && bossPtr->canBeRemoved()) {
         restartLevel();
     }
 

@@ -21,6 +21,13 @@ public:
 
     void updateHitboxPosition();
 
+    enum class BossState { Walking, Throwing, Dead };
+    BossState state = BossState::Walking;
+
+    void updateAnimation(float deltaTime) override;
+
+    sf::Texture deadTexture;
+
 private:
     void launchBarrel();
 
@@ -33,6 +40,8 @@ private:
 
     float leftEdge;
     float rightEdge;
+
+    float spriteYOffset = 30.f;
 
     std::vector<sf::FloatRect> currentLadders;
     std::vector<sf::FloatRect> currentGround;

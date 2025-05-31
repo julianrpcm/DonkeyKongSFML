@@ -1,4 +1,5 @@
 #include "BossEnemy.h"
+#include "Enemy.h"
 #include <iostream>
 
 BossEnemy::BossEnemy(const sf::FloatRect& platformCollider, const std::string& projectPath) 
@@ -7,18 +8,27 @@ BossEnemy::BossEnemy(const sf::FloatRect& platformCollider, const std::string& p
     health = 100;
 
     // --- Parámetros visuales y de animación ---
-    visualScale = 1.5f;
+    visualScale = 2.f;
     frameCount = 8;
     frameWidth = 64.f;
     frameHeight = 64.f;
     animationSpeed = 0.1f;
 
-    if (!texture.loadFromFile(projectPath + "/assets/sprites/Boss/Move.png")) {
+    rowIndex = 1;
+
+    if (!texture.loadFromFile(projectPath + "/assets/sprites/Boss/Fire golem.png")) {
         std::cerr << "Failed to load boss texture\n";
     }
 
     sprite.setTexture(texture);
-    currentFrame = { 0, 0, static_cast<int>(frameWidth), static_cast<int>(frameHeight) };
+
+    currentFrame = {
+    0,
+    static_cast<int>(frameHeight) * rowIndex, // Segunda fila
+    static_cast<int>(frameWidth),
+    static_cast<int>(frameHeight)
+    };
+
     sprite.setTextureRect(currentFrame);
     sprite.setScale(visualScale, visualScale);
 
@@ -27,14 +37,14 @@ BossEnemy::BossEnemy(const sf::FloatRect& platformCollider, const std::string& p
     float spriteHeight = frameHeight * visualScale;
 
     float xStart = platformCollider.left + (platformCollider.width / 2.f) - (spriteWidth / 2.f);
-    float y = platformCollider.top - (frameHeight * visualScale) + 8.f;
-
+    float y = (platformCollider.top - spriteHeight) + spriteYOffset;
+    
     sprite.setPosition({ xStart, y });
 
     // --- HITBOX (shape) ajustada al sprite ---
     sf::FloatRect spriteBounds = sprite.getGlobalBounds();
-    float marginX = 4.f;
-    float marginY = 6.f;
+     float marginX = 10.f;
+    float marginY = 12.f;
 
     shape.setSize({
         spriteBounds.width - 2.f * marginX,
@@ -55,24 +65,40 @@ BossEnemy::BossEnemy(const sf::FloatRect& platformCollider, const std::string& p
 }
 
 void BossEnemy::update(float deltaTime, const std::vector<sf::FloatRect>& groundColliders) {
+
+    if (state == BossState::Dead) {
+        updateAnimation(deltaTime);
+        if (frameIndex == frameCount - 1 && animationTimer == 0.f) {
+            isDying = false;
+        }
+        return;
+    }
+
     timer += deltaTime;
 
     if (throwPauseTimer > 0.f) {
         throwPauseTimer -= deltaTime;
-        if (throwPauseTimer < 0.f)
+        if (throwPauseTimer < 0.f) {
             throwPauseTimer = 0.f;
+            state = BossState::Walking;
+            frameIndex = 0;
+        }
+
     }
     else {
         if (timer >= cooldown) {
             timer = 0.f;
             launchBarrel();
             throwPauseTimer = throwPauseDuration;
+            state = BossState::Throwing;
+            frameIndex = 0;
         }
 
         float dx = direction * speed * deltaTime;
-        shape.move(dx, 0.f);
+        sprite .move(dx, 0.f);
+        updateHitboxPosition();
 
-        sf::FloatRect footCheck = getFootCheck();
+         sf::FloatRect footCheck = getFootCheck();
         bool groundAhead = false;
         for (const auto& collider : groundColliders) {
             if (footCheck.intersects(collider)) {
@@ -80,16 +106,19 @@ void BossEnemy::update(float deltaTime, const std::vector<sf::FloatRect>& ground
                 break;
             }
         }
+
         if (!groundAhead) {
             direction *= -1;
         }
+    }
 
-        // Reposicionar sprite en función del nuevo shape
-        float spriteX = shape.getPosition().x + (shape.getSize().x / 2.f) - (frameWidth * visualScale / 2.f);
-        float spriteY = shape.getPosition().y + shape.getSize().y - (frameHeight * visualScale);
-        sprite.setPosition(spriteX, spriteY);
-
-        updateHitboxPosition();
+    if (state == BossState::Walking) {
+        rowIndex = 1;
+        frameCount = 8;
+    }
+    else if (state == BossState::Throwing) {
+        rowIndex = 5;
+        frameCount = 2;
     }
 
     updateAnimation(deltaTime);
@@ -108,13 +137,15 @@ void BossEnemy::update(float deltaTime, const std::vector<sf::FloatRect>& ground
 }
 
 void BossEnemy::draw(sf::RenderWindow& window) {
-    if (!isDead()) window.draw(sprite);
+
+    if (state != BossState::Dead || isDying) 
+        window.draw(sprite);
 
     for (auto& p : projectiles) {
         p->draw(window);
     }
 
-    // DEBUG: dibuja la hitbox en rojo transparente
+   /* // DEBUG: dibuja la hitbox en rojo transparente
  shape.setFillColor(sf::Color::Transparent);
  shape.setOutlineColor(sf::Color::Red);
  shape.setOutlineThickness(1.f);
@@ -125,17 +156,13 @@ void BossEnemy::draw(sf::RenderWindow& window) {
  spriteBox.setFillColor(sf::Color::Transparent);
  spriteBox.setOutlineColor(sf::Color::Blue);
  spriteBox.setOutlineThickness(1.f);
- window.draw(spriteBox);
+ window.draw(spriteBox);*/
 }
 
 sf::FloatRect BossEnemy::getBounds() const {
     return shape.getGlobalBounds();
 }
 
-void BossEnemy::takeDamage(int damage) {
-    health -= damage;
-    if (health < 0) health = 0;
-}
 
 void BossEnemy::setLadders(const std::vector<sf::FloatRect>& ladders) {
     currentLadders = ladders;
@@ -160,14 +187,49 @@ void BossEnemy::launchBarrel() {
 void BossEnemy::updateHitboxPosition() {
     sf::FloatRect spriteBounds = sprite.getGlobalBounds();
 
-    float desiredWidth = spriteBounds.width - 35.f;
-    float desiredHeight = spriteBounds.height - 30.f;
+    float desiredWidth = spriteBounds.width * 0.4f;
+    float desiredHeight = spriteBounds.height * 0.6f;
 
     shape.setSize({ desiredWidth, desiredHeight });
 
     shape.setPosition({
         spriteBounds.left + (spriteBounds.width - desiredWidth) / 2.f,
-        spriteBounds.top + (spriteBounds.height - desiredHeight)
+        spriteBounds.top + (spriteBounds.height - desiredHeight) / 2.f
         });
+}
+
+void BossEnemy::updateAnimation(float deltaTime)
+{
+    animationTimer += deltaTime;
+    if (animationTimer >= animationSpeed) {
+        animationTimer = 0.f;
+        frameIndex = (frameIndex + 1) % frameCount;
+
+        currentFrame.left = static_cast<int>(frameWidth) * frameIndex;
+        currentFrame.top = static_cast<int>(frameHeight) * rowIndex; // mantiene la fila
+        currentFrame.width = static_cast<int>(frameWidth);
+        currentFrame.height = static_cast<int>(frameHeight);
+
+        sprite.setTextureRect(currentFrame);
+    }
+
+    // Reflejar según dirección
+    sprite.setScale(direction > 0 ? -visualScale : visualScale, visualScale);
+    sprite.setOrigin(direction > 0 ? frameWidth : 0.f, 0.f);
+}
+
+void BossEnemy::takeDamage(int damage) {
+    health -= damage;
+    if (health <= 0 && !isDying) {
+        health = 0;
+        isDying = true;
+        state = BossState::Dead;
+
+        rowIndex = 7;
+        frameCount = 6;
+        frameIndex = 0;
+        animationSpeed = 0.15f;
+
+    }
 }
 

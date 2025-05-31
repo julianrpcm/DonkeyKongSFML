@@ -17,6 +17,16 @@ public:
     void setPosition(const sf::Vector2f& pos);
     virtual void updateAnimation(float deltaTime);
 
+    virtual bool canBeRemoved() const {
+        return isDead() && !isDying;
+    }
+
+    bool hasGivenScore = false;
+
+    bool shouldGiveScore() const {
+        return isDead() && !hasGivenScore;
+    }
+
 
 protected:
     sf::RectangleShape shape;
@@ -31,20 +41,22 @@ protected:
     float frameHeight = 32.f;
     float animationSpeed = 0.1f;
     float visualScale = 1.f;
-
+    int rowIndex;
 
     int direction = -1;
     int health = 100;
+
+    bool isDying = false;
 
     sf::FloatRect getFootCheck() const {
         const float footWidth = 6.f;
         const float footHeight = 2.f;
         const float offsetY = 2.f;
 
-        sf::FloatRect spriteBounds = sprite.getGlobalBounds();
+        sf::FloatRect spriteBounds = shape.getGlobalBounds();
 
-        float x = sprite.getPosition().x + spriteBounds.width / 2.f - footWidth / 2.f;
-        float y = sprite.getPosition().y + spriteBounds.height + offsetY;
+        float x = shape.getPosition().x + spriteBounds.width / 2.f - footWidth / 2.f;
+        float y = shape.getPosition().y + spriteBounds.height + offsetY;
 
         return { x, y, footWidth, footHeight };
     }

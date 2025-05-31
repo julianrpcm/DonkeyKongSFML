@@ -109,7 +109,7 @@ void BarrelProjectile::update(float deltaTime,
 void BarrelProjectile::draw(sf::RenderWindow& window){
     window.draw(sprite);
 
-    // DEBUG: dibujar hitbox
+   /* // DEBUG: dibujar hitbox
     hitbox.setFillColor(sf::Color::Transparent);
     hitbox.setOutlineColor(sf::Color::Red);
     hitbox.setOutlineThickness(1.f);
@@ -125,7 +125,7 @@ void BarrelProjectile::draw(sf::RenderWindow& window){
     spriteBox.setFillColor(sf::Color::Transparent);
     spriteBox.setOutlineColor(sf::Color::Blue); // Azul = sprite lógico
     spriteBox.setOutlineThickness(1.f);
-    window.draw(spriteBox);
+    window.draw(spriteBox);*/
 
 }
 
@@ -141,8 +141,8 @@ bool BarrelProjectile::isOffScreen() const {
 void BarrelProjectile::updateHitboxPosition() {
     sf::FloatRect spriteBounds = sprite.getGlobalBounds();
 
-    float desiredWidth = spriteBounds.width - 35.f;
-    float desiredHeight = spriteBounds.height - 30.f;
+    float desiredWidth = spriteBounds.width - 27.f;
+    float desiredHeight = spriteBounds.height - 20.f;
 
     hitbox.setSize({ desiredWidth, desiredHeight });
 

@@ -16,6 +16,11 @@ BasicEnemy::BasicEnemy(const sf::FloatRect& platformCollider, const std::string&
         std::cerr << "Error loading Walk.png\n";
     }
 
+
+    if (!deadTexture.loadFromFile(projectPath + "/assets/sprites/Enemy/Dead.png")) {
+        std::cerr << "Failed to load death texture\n";
+    }
+
     sprite.setTexture(texture);
     currentFrame = { 0, 0, static_cast<int>(frameWidth), static_cast<int>(frameHeight) };
     sprite.setTextureRect(currentFrame);
@@ -62,6 +67,17 @@ void BasicEnemy::update(float deltaTime, const std::vector<sf::FloatRect>& groun
         direction *= -1;
     }
 
+    if (isDead()) {
+        if (isDying) {
+            updateAnimation(deltaTime);
+            if (frameIndex >= frameCount - 1 && animationTimer == 0.f) {
+                isDying = false; // Ya terminó de morir
+            }
+        }
+        return; // No mover ni actualizar más
+    }
+
+
     float dx = direction * speed * deltaTime;
     sprite.move(dx, 0.f);
     //shape.setPosition(sprite.getPosition());
@@ -71,7 +87,7 @@ void BasicEnemy::update(float deltaTime, const std::vector<sf::FloatRect>& groun
 }
 
 void BasicEnemy::draw(sf::RenderWindow& window) {
-    if (isDead()) return;
+    if (isDead() && !isDying) return;
     window.draw(sprite);
 
     // DEBUG: dibuja la hitbox en rojo transparente
@@ -112,4 +128,18 @@ void BasicEnemy::updateHitboxPosition() {
         spriteBounds.top + (spriteBounds.height - desiredHeight)
         });
 }
+
+void BasicEnemy::takeDamage(int damage) {
+    health -= damage;
+    if (health <= 0 && !isDying) {
+        health = 0;
+        isDying = true;
+        frameIndex = 0;
+        frameCount = 3; // Asumiendo 4 frames en Dead.png
+        animationSpeed = 0.15f;
+
+        sprite.setTexture(deadTexture);
+    }
+}
+
 
