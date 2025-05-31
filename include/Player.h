@@ -31,8 +31,42 @@ public:
     bool isAlive() const;
     void die();
 
+    void loadTexture(const std::string& projectPath);
+    bool hasDeathAnimationFinished() const;
+
+
+    enum class PlayerState {
+        Idle,
+        Walk,
+        Jump,
+        Climb,
+        Dead,
+    };
+
 private:
-    sf::RectangleShape shape;
+    sf::RectangleShape hitbox;
+
+    sf::Texture texture;
+    sf::Sprite sprite;
+    PlayerState state;
+
+
+    int currentFrame = 0;
+    float animationTimer = 0.f;
+    float animationSpeed = 0.1f;
+
+    const int frameWidth = 64;
+    const int frameHeight = 64;
+
+    const int IDLE_ROW = 0;
+    const int WALK_ROW = 3;
+    const int JUMP_ROW = 17;
+    const int CLIMB_ROW = 10;
+    const int DEAD_ROW = 8;
+    const int DEAD_MAX_FRAMES = 12;
+
+
+
     sf::Vector2f velocity;
     float gravity = 500.f;
     bool onGround = false;
@@ -47,4 +81,5 @@ private:
     void handleBossCollision(BossEnemy* boss);
     void handleBossProjectiles(BossEnemy* boss);
     bool tryStompEnemy(const sf::FloatRect& enemyBounds, std::function<void()> onStomp);
+    void updateAnimation(float dt);
 };

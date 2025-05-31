@@ -22,6 +22,7 @@ Game::Game()
         enemyGroundColliders.push_back(c);
     }
 
+    player.loadTexture(getProjectPath());
     player.setLevel(&level);
 
     if (!enemyGroundColliders.empty())
