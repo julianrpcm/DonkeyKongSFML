@@ -36,7 +36,6 @@ void Enemy::updateAnimation(float deltaTime)
         sprite.setTextureRect(currentFrame);
     }
 
-    // Reflejar sprite según dirección
     sprite.setScale(direction > 0 ? visualScale : -visualScale, visualScale);
     sprite.setOrigin(direction > 0 ? 0.f : frameWidth, 0.f);
 }
