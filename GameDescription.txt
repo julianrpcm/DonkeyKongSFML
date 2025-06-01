@@ -1,0 +1,21 @@
+Game Description:
+
+In this retro-style platformer inspired by Donkey Kong, the player must navigate through increasingly challenging levels filled with enemies, hazards, and collectible coins. The goal is to survive, collect as many points as possible, and defeat the boss to advance. Each level becomes progressively harder, with faster enemies, more frequent traps, and an increasing number of projectiles.
+
+Challenges:
+
+Avoid moving enemies.
+
+Collect coins to increase your score.
+
+Face the boss and dodge its bouncing projectiles.
+
+Escape poisonous attacks from fixed plant enemies.
+
+Controls:
+
+Arrow keys – Move left/right
+
+Up arrow – Climb ladders
+
+Spacebar – Jump
