@@ -15,9 +15,6 @@ file(GLOB SOURCES "source/*.cpp")
 set(TMXLITE_STATIC_LIB ON CACHE BOOL "Build tmxlite as static library")
 add_subdirectory(external/tmxlite)
 
-# Si usas pugixml también como fuente externa:
-# set(PUGIXML_SRC "") # define si lo usas directamente
-
 # Buscar SFML instalado
 set(SFML_DIR "C:/Users/Julian/SFML/lib/cmake/SFML")
 find_package(SFML 2.6 COMPONENTS graphics window system REQUIRED)
@@ -36,5 +33,5 @@ target_link_libraries(${PROJECT_NAME}
     sfml-graphics sfml-window sfml-system
 )
 
-# Copiar assets automáticamente al directorio de build (opcional pero recomendable)
+# Copiar assets automáticamente al directorio de build
 file(COPY assets/ DESTINATION ${CMAKE_BINARY_DIR}/assets)
