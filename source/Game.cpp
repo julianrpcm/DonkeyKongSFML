@@ -85,9 +85,22 @@ void Game::update(float deltaTime) {
         enemy->update(deltaTime, enemyGroundColliders);
     }
 
+    for (const auto& enemy : enemies) {
+        auto* venom = dynamic_cast<VenomEnemy*>(enemy.get());
+        if (venom) {
+            for (const auto& projectile : venom->getProjectiles()) {
+                if (projectile->getBounds().intersects(player.getBounds())) {
+                    player.die();
+                }
+            }
+        }
+    }
+
     bossPtr->setLadders(ladders);
     bossPtr->setGroundColliders(barrelGroundColliders);
     bossPtr->update(deltaTime, enemyGroundColliders);
+
+   
 
     for (const auto& enemy : enemies) {
         if (enemy->shouldGiveScore()) {
@@ -112,6 +125,16 @@ void Game::update(float deltaTime) {
             scoreManager.addPoints(50);
         }
     }
+
+    for (auto& rune : runes) {
+        rune.update(deltaTime);
+
+        if (!rune.isCollected() && rune.getBounds().intersects(player.getBounds())) {
+            rune.collect();
+            player.applySpeedBuff(10.f);
+        }
+    }
+
 
     if (bossPtr && bossPtr->shouldGiveScore()) {
         scoreManager.addPoints(500);
@@ -154,6 +177,11 @@ void Game::render() {
         coin.draw(window);
     }
 
+    for (const auto& rune : runes) {
+        rune.draw(window);
+    }
+
+
     if (showDeathMenu) {
         window.draw(deathOverlay);
         window.draw(gameOverText);
@@ -174,10 +202,13 @@ void Game::restartLevel() {
     spawnEnemyAt(EnemyType::Basic, 14);
     spawnEnemyAt(EnemyType::Basic, 35);
     spawnEnemyAt(EnemyType::Basic, 21);
+    spawnEnemyAt(EnemyType::Venom, 17);
 
     spawnRandomCoin();
     spawnRandomCoin();
     spawnRandomCoin();
+
+    spawnRandomRune();
 
     {
         sf::FloatRect base = enemyGroundColliders[32];
@@ -203,7 +234,7 @@ void Game::loadLevel() {
     std::string rootPath = getProjectPath();
     std::string tmxPath = rootPath + "/assets/maps/world.tmx";
 
-    if (!level.loadFromFile(tmxPath)) {
+    if (!level.loadFromFile(tmxPath, getProjectPath())) {
         std::cerr << "Error loading level\n";
         exit(1);
     }
@@ -233,10 +264,13 @@ void Game::loadLevel() {
     spawnEnemyAt(EnemyType::Basic, 14);
     spawnEnemyAt(EnemyType::Basic, 35);
     spawnEnemyAt(EnemyType::Basic, 21);
+    spawnEnemyAt(EnemyType::Venom, 17);
 
     spawnRandomCoin();
     spawnRandomCoin();
     spawnRandomCoin();
+
+    spawnRandomRune();
 }
 
 void Game::updateUI() {
@@ -249,7 +283,7 @@ void Game::initUI() {
     std::string bgPath = getProjectPath() + "/assets/sprites/UI/menu_background.png";
 
     if (!menuBackgroundTexture.loadFromFile(bgPath)) {
-        std::cerr << "No se pudo cargar la imagen de fondo del menú\n";
+        std::cerr << "Failed to load menu_backgorund\n";
     }
     else {
         menuBackground.setTexture(menuBackgroundTexture);
@@ -260,11 +294,10 @@ void Game::initUI() {
         float scaleY = static_cast<float>(windowSize.y) / textureSize.y;
 
         menuBackground.setScale(scaleX, scaleY);
-
     }
 
     if (!font.loadFromFile(getProjectPath() + "/assets/fonts/OpenSans-Regular.ttf")) {
-        std::cerr << "No se pudo cargar la fuente\n";
+        std::cerr << "Failed to load font\n";
         return;
     }
 
@@ -328,7 +361,6 @@ void Game::initUI() {
 //Spawn
 void Game::spawnEnemyAt(EnemyType type, int colliderIndex) {
     if (colliderIndex < 0 || colliderIndex >= static_cast<int>(enemyGroundColliders.size())) {
-        std::cerr << "Índice de collider inválido: " << colliderIndex << "\n";
         return;
     }
 
@@ -342,15 +374,23 @@ void Game::spawnEnemyAt(EnemyType type, int colliderIndex) {
         break;
     }
     case EnemyType::Venom: {
-        sf::Vector2f pos = {
-            collider.left + collider.width / 2.f - 8.f,
-            collider.top - 16.f
-        };
-        venomEnemy = std::make_unique<VenomEnemy>(pos, getProjectPath());
+        auto venom = std::make_unique<VenomEnemy>(collider, getProjectPath());
+
+        float adjustedCooldown = std::max(2.f, 10.f - (currentLevel * 0.5f));
+        venom->setShootCooldown(adjustedCooldown);
+
+        enemies.push_back(std::move(venom));
         break;
     }
     case EnemyType::Boss: {
         bossPtr = std::make_unique<BossEnemy>(collider, getProjectPath());
+
+        float baseCooldown = 5.f;
+        float minCooldown = 1.2f;
+        float reductionPerLevel = 0.5f;
+
+        float newCooldown = std::max(minCooldown, baseCooldown - (currentLevel - 1) * reductionPerLevel);
+        bossPtr->setShootCooldown(newCooldown);
         break;
     }
     }
@@ -390,6 +430,46 @@ void Game::spawnRandomCoin() {
 
         if (!intersectsCollider) {
             coins.emplace_back(pos, path);
+            return;
+        }
+    }
+}
+
+void Game::spawnRandomRune()
+{
+    const std::string path = getProjectPath();
+
+    float minX = 0.f;
+    float maxX = static_cast<float>(window.getSize().x - 16);
+    float minY = 0.f;
+    float maxY = static_cast<float>(window.getSize().y - 16);
+
+    const int maxAttempts = 100;
+    int attempts = 0;
+    sf::FloatRect runeBounds(0, 0, 16.f, 16.f);
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<float> distX(minX, maxX);
+    std::uniform_real_distribution<float> distY(minY, maxY);
+
+    while (attempts < maxAttempts) {
+        attempts++;
+
+        sf::Vector2f pos(distX(gen), distY(gen));
+        runeBounds.left = pos.x;
+        runeBounds.top = pos.y;
+
+        bool intersectsCollider = false;
+        for (const auto& collider : baseColliders) {
+            if (collider.intersects(runeBounds)) {
+                intersectsCollider = true;
+                break;
+            }
+        }
+
+        if (!intersectsCollider) {
+            runes.emplace_back(pos, path);
             return;
         }
     }

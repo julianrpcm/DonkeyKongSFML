@@ -3,13 +3,24 @@
 
 Venom::Venom(const sf::Vector2f& position, const std::string& rootPath) {
     if (!texture.loadFromFile(rootPath + "/assets/sprites/Venom/Cloud_posion.png")) {
-        std::cerr << "No se pudo cargar Cloud_posion.png\n";
+        std::cerr << "Failed to load Cloud_posion.png\n";
     }
 
-    frameRect = { 0, 0, 16, 16 }; // asumiendo que cada frame es 16x16
+    frameRect = { 0, 0, 64, 64 };
     sprite.setTexture(texture);
     sprite.setTextureRect(frameRect);
     sprite.setPosition(position);
+
+    float shapeWidth = 40.f;
+    float shapeHeight = 36.f;
+
+    shape.setSize({ shapeWidth, shapeHeight });
+
+    shape.setPosition({
+        position.x + (frameRect.width - shapeWidth) / 2.f,
+        position.y + frameRect.height - shapeHeight
+        });
+
 }
 
 void Venom::update(float dt) {
@@ -23,10 +34,18 @@ void Venom::update(float dt) {
         frameRect.left = currentFrame * frameRect.width;
         sprite.setTextureRect(frameRect);
     }
+
+    sf::Vector2f pos = sprite.getPosition();
+    shape.setPosition({
+        pos.x + (frameRect.width - shape.getSize().x) / 2.f,
+        pos.y + frameRect.height - shape.getSize().y
+        });
+
 }
 
 void Venom::draw(sf::RenderWindow& window) const {
-    if (!isExpired()) window.draw(sprite);
+    if (!isExpired()) 
+        window.draw(sprite);
 }
 
 bool Venom::isExpired() const {
@@ -34,5 +53,5 @@ bool Venom::isExpired() const {
 }
 
 sf::FloatRect Venom::getBounds() const {
-    return sprite.getGlobalBounds();
+    return shape.getGlobalBounds();
 }

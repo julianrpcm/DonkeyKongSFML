@@ -20,9 +20,7 @@ Player::Player() {
 
     sprite.setPosition(hitbox.getPosition());
 
-    // Estado inicial
     state = PlayerState::Idle;
-
 }
 
 void Player::update(float dt,
@@ -37,20 +35,27 @@ void Player::update(float dt,
         return; 
     }
 
-    // Movimiento horizontal
     velocity.x = 0.f;
+    float moveSpeed = speedBuffActive ? 250.f : 150.f;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) 
-        velocity.x = -150.f;
+        velocity.x = -moveSpeed;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) 
-        velocity.x = 150.f;
+        velocity.x = moveSpeed;
+
+    if (speedBuffActive) {
+        speedBuffTimer -= dt;
+        if (speedBuffTimer <= 0.f) {
+            speedBuffActive = false;
+        }
+    }
 
     if (velocity.x != 0) 
         state = PlayerState::Walk;
     else                 
         state = PlayerState::Idle;
 
-    // Detección de escaleras
+    //Detection ladders
     sf::FloatRect playerBounds = hitbox.getGlobalBounds();
     bool isTouchingLadder = false;
     for (const auto& ladder : ladders) {
@@ -60,7 +65,6 @@ void Player::update(float dt,
         }
     }
 
-    // Activar/desactivar modo escalera
     if (!onLadder && isTouchingLadder && (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))) {
         onLadder = true;
         if (levelRef) 
@@ -72,7 +76,6 @@ void Player::update(float dt,
             levelRef->setLadderBlockersEnabled(true);
     }
 
-    // Movimiento vertical
     if (onLadder) {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
             velocity.y = -100.f;
@@ -97,7 +100,6 @@ void Player::update(float dt,
         onGround = false;
     }
 
-    // Aplicar colisiones
     std::vector<sf::FloatRect> allColliders = colliders;
     allColliders.insert(allColliders.end(), laddersBlockers.begin(), laddersBlockers.end());
 
@@ -118,7 +120,6 @@ void Player::update(float dt,
     sprite.setPosition(hitbox.getPosition());
     updateAnimation(dt);
 
-    // Interacciones
     handleEnemyCollisions(enemies);
     handleBossProjectiles(boss);
     handleBossCollision(boss);
@@ -126,21 +127,6 @@ void Player::update(float dt,
 
 void Player::draw(sf::RenderWindow& window) const {
     window.draw(sprite);
-
-    // DEBUG: Cuadro para visualizar los límites del sprite
-   /* sf::RectangleShape box(sf::Vector2f(64.f, 64.f));
-    box.setPosition(sprite.getPosition().x - 32.f, sprite.getPosition().y); // compensar origen
-    box.setFillColor(sf::Color::Transparent);
-    box.setOutlineColor(sf::Color::Blue);
-    box.setOutlineThickness(1.f);
-    window.draw(box);
-
-    // Dibujar la hitbox lógica (en rojo semitransparente)
-    sf::RectangleShape debugBox(hitbox);
-    debugBox.setFillColor(sf::Color(255, 0, 0, 100));  // rojo con transparencia
-    debugBox.setOutlineColor(sf::Color::Red);
-    debugBox.setOutlineThickness(1.f);
-    window.draw(debugBox);*/
 }
 
 sf::FloatRect Player::getBounds() const {
@@ -249,7 +235,7 @@ void Player::die() {
 void Player::loadTexture(const std::string& projectPath)
 {
     if (!texture.loadFromFile(projectPath + "/assets/sprites/Player/Player.png")) {
-        std::cerr << "Error cargando la textura del jugador\n";
+        std::cerr << "Failed to load player texture\n";
     }
     sprite.setTexture(texture);
 }
@@ -271,6 +257,14 @@ void Player::reset(const sf::Vector2f& startPos)
 
     hitbox.setPosition(startPos);
     sprite.setPosition(hitbox.getPosition());
+
+    clearBuffs();
+}
+
+void Player::clearBuffs()
+{
+    speedBuffActive = false;
+    speedBuffTimer = 0.f;
 }
 
 void Player::updateAnimation(float dt)
@@ -322,9 +316,14 @@ void Player::updateAnimation(float dt)
         frameHeight
     ));
 
-    // Voltear sprite si va a la izquierda
     if (velocity.x < 0)
-        sprite.setScale(-1.f, 1.f); // flip
+        sprite.setScale(-1.f, 1.f);
     else if (velocity.x > 0)
-        sprite.setScale(1.f, 1.f);  // normal
+        sprite.setScale(1.f, 1.f);
+}
+
+void Player::applySpeedBuff(float duration)
+{
+    speedBuffTimer = duration;
+    speedBuffActive = true;
 }

@@ -7,10 +7,10 @@ Coin::Coin(const sf::Vector2f& position, const std::string& rootPath) {
     std::string path = rootPath + "/assets/sprites/Coin.png";
 
     if (!texture.loadFromFile(path)) {
-        std::cerr << "No se pudo cargar la textura de moneda\n";
+        std::cerr << "Failed to load coin texture\n";
     }
 
-    frameRect = { 0, 0, 10, 16 }; // ancho y alto por frame
+    frameRect = { 0, 0, 10, 16 };
     sprite.setTexture(texture);
     sprite.setTextureRect(frameRect);
     sprite.setPosition(position);

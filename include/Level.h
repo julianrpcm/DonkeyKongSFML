@@ -5,7 +5,7 @@
 
 class Level {
 public:
-    bool loadFromFile(const std::string& tmxPath);
+    bool loadFromFile(const std::string& tmxPath, const std::string& projectRoot);
 
     void draw(sf::RenderWindow& window) const;
 

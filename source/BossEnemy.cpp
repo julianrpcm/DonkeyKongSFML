@@ -119,21 +119,6 @@ void BossEnemy::draw(sf::RenderWindow& window) {
     for (auto& p : projectiles) {
         p->draw(window);
     }
-
-    // DEBUG HITBOX
-    /*
-    shape.setFillColor(sf::Color::Transparent);
-    shape.setOutlineColor(sf::Color::Red);
-    shape.setOutlineThickness(1.f);
-    window.draw(shape);
-
-    sf::RectangleShape spriteBox({ frameWidth * visualScale, frameHeight * visualScale });
-    spriteBox.setPosition(sprite.getPosition());
-    spriteBox.setFillColor(sf::Color::Transparent);
-    spriteBox.setOutlineColor(sf::Color::Blue);
-    spriteBox.setOutlineThickness(1.f);
-    window.draw(spriteBox);
-    */
 }
 
 sf::FloatRect BossEnemy::getBounds() const {
@@ -150,6 +135,11 @@ void BossEnemy::setGroundColliders(const std::vector<sf::FloatRect>& ground) {
 
 std::vector<std::unique_ptr<BarrelProjectile>>& BossEnemy::getProjectiles() {
     return projectiles;
+}
+
+void BossEnemy::setShootCooldown(float seconds)
+{
+    cooldown = seconds;
 }
 
 void BossEnemy::launchBarrel() {

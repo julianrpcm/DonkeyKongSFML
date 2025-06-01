@@ -1,11 +1,11 @@
 # ninja log v6
 30	339	7702297371178728	CMakeFiles/DonkeyKongSFML.dir/source/ScoreManager.cpp.obj	4bd5dcf3e223e6f2
 33	895	7701337787176227	external/tmxlite/CMakeFiles/tmxlite.dir/src/ObjectGroup.cpp.obj	f985bfce63dd9d6
-24	591	7702419261863945	CMakeFiles/DonkeyKongSFML.dir/source/Level.cpp.obj	bc84dadbacf6998b
-29	571	7704227507464728	CMakeFiles/DonkeyKongSFML.dir/source/main.cpp.obj	6e830aee7ac2bbf0
+8	748	7704787601815354	CMakeFiles/DonkeyKongSFML.dir/source/Level.cpp.obj	bc84dadbacf6998b
+15	685	7704856368719070	CMakeFiles/DonkeyKongSFML.dir/source/main.cpp.obj	6e830aee7ac2bbf0
 51	707	7701337787322972	external/tmxlite/CMakeFiles/tmxlite.dir/src/detail/pugixml.cpp.obj	35d64f1392051ccd
-16	848	7704188690070961	CMakeFiles/DonkeyKongSFML.dir/source/Player.cpp.obj	4f0c2dac1ec90d28
-817	941	7704228511224770	DonkeyKongSFML.exe	5e971b20d81baa95
+27	612	7704853897555188	CMakeFiles/DonkeyKongSFML.dir/source/Player.cpp.obj	4f0c2dac1ec90d28
+781	916	7704847901142152	DonkeyKongSFML.exe	5e971b20d81baa95
 58	690	7701334502108490	CMakeFiles/DonkeyKongSFML.dir/source/pugixml/pugixml.cpp.obj	e0fab995fb1040cd
 41	362	7701334501923567	external/tmxlite/CMakeFiles/tmxlite.dir/src/miniz.c.obj	9a2c57be8726c8df
 23	869	7701337787080073	external/tmxlite/CMakeFiles/tmxlite.dir/src/ImageLayer.cpp.obj	e90fc6605c9e5b5c
@@ -22,8 +22,14 @@
 1113	1268	7701337797976126	external/tmxlite/tmxlite-d.lib	a88ca7fb2dce4899
 22	814	7704073341706592	CMakeFiles/DonkeyKongSFML.dir/source/Enemy.cpp.obj	2854954a6a0f0039
 9	824	7704073341549143	CMakeFiles/DonkeyKongSFML.dir/source/BarrelProjectile.cpp.obj	faf036055caab6de
-22	566	7704227507394373	CMakeFiles/DonkeyKongSFML.dir/source/Coin.cpp.obj	ca8957b10bf8013e
-16	828	7704073341642514	CMakeFiles/DonkeyKongSFML.dir/source/BossEnemy.cpp.obj	2aa912b364e2aaa0
-23	816	7704228503286935	CMakeFiles/DonkeyKongSFML.dir/source/Game.cpp.obj	a59b33f6a39c9878
-21	665	7702485336226550	CMakeFiles/DonkeyKongSFML.dir/source/Venom.cpp.obj	8511c8c3e9ad67e7
-33	830	7704073341807720	CMakeFiles/DonkeyKongSFML.dir/source/VenomEnemy.cpp.obj	3d7ad53be18363c7
+8	682	7704856368648747	CMakeFiles/DonkeyKongSFML.dir/source/Coin.cpp.obj	ca8957b10bf8013e
+22	449	7704847893562727	CMakeFiles/DonkeyKongSFML.dir/source/BossEnemy.cpp.obj	2aa912b364e2aaa0
+12	814	7704856368661508	CMakeFiles/DonkeyKongSFML.dir/source/Game.cpp.obj	a59b33f6a39c9878
+34	415	7704847893684986	CMakeFiles/DonkeyKongSFML.dir/source/Venom.cpp.obj	8511c8c3e9ad67e7
+38	434	7704847893715644	CMakeFiles/DonkeyKongSFML.dir/source/VenomEnemy.cpp.obj	3d7ad53be18363c7
+25	797	7704863366149012	CMakeFiles/DonkeyKongSFML.dir/source/SpeedRune.cpp.obj	7c812d5ef4609c2b
+28	861	7704863366179378	CMakeFiles/DonkeyKongSFML.dir/source/main.cpp.obj	6e830aee7ac2bbf0
+15	863	7704863366046039	CMakeFiles/DonkeyKongSFML.dir/source/Coin.cpp.obj	ca8957b10bf8013e
+22	866	7704863366118992	CMakeFiles/DonkeyKongSFML.dir/source/Player.cpp.obj	4f0c2dac1ec90d28
+19	1062	7704863366087355	CMakeFiles/DonkeyKongSFML.dir/source/Game.cpp.obj	a59b33f6a39c9878
+1062	1209	7704863376513317	DonkeyKongSFML.exe	58eb5915d6f7370f

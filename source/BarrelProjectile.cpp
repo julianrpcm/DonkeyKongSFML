@@ -55,7 +55,6 @@ void BarrelProjectile::update(float deltaTime,
         sprite.setTexture(textures[currentFrame]);
     }
 
-    // Movimiento horizontal
     sf::FloatRect boundsX = hitbox.getGlobalBounds();
     boundsX.left += dx;
 
@@ -79,7 +78,6 @@ void BarrelProjectile::update(float deltaTime,
         updateHitboxPosition();
     }
 
-    // Movimiento vertical con gravedad
     velocityY += gravity * deltaTime;
     sf::FloatRect boundsY = hitbox.getGlobalBounds();
 
@@ -103,30 +101,10 @@ void BarrelProjectile::update(float deltaTime,
     }
 
     sprite.setScale(direction > 0 ? visualScale : -visualScale, -visualScale);
-    //updateHitboxPosition();
 }
 
 void BarrelProjectile::draw(sf::RenderWindow& window){
     window.draw(sprite);
-
-   /* // DEBUG: dibujar hitbox
-    hitbox.setFillColor(sf::Color::Transparent);
-    hitbox.setOutlineColor(sf::Color::Red);
-    hitbox.setOutlineThickness(1.f);
-    window.draw(hitbox);
-
-    sf::FloatRect local = sprite.getLocalBounds();
-
-    sf::RectangleShape spriteBox;
-    spriteBox.setSize({ local.width, local.height });
-    spriteBox.setOrigin(sprite.getOrigin());
-    spriteBox.setPosition(sprite.getPosition());
-    spriteBox.setScale(sprite.getScale()); // aplica reflejo
-    spriteBox.setFillColor(sf::Color::Transparent);
-    spriteBox.setOutlineColor(sf::Color::Blue); // Azul = sprite lógico
-    spriteBox.setOutlineThickness(1.f);
-    window.draw(spriteBox);*/
-
 }
 
 sf::FloatRect BarrelProjectile::getBounds() const {

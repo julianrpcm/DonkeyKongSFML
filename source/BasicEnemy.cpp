@@ -26,7 +26,6 @@ BasicEnemy::BasicEnemy(const sf::FloatRect& platformCollider, const std::string&
     sprite.setTextureRect(currentFrame);
     sprite.setScale(visualScale, visualScale);
 
-    // Posicionar sprite (sin depender del shape)
     float spriteWidth = frameWidth * visualScale;
     float spriteHeight = frameHeight * visualScale;
 
@@ -34,9 +33,8 @@ BasicEnemy::BasicEnemy(const sf::FloatRect& platformCollider, const std::string&
     float y = platformCollider.top - spriteHeight;
     sprite.setPosition({ xStart, y });
 
-    // HITBOX ajustada al sprite visible
     sf::FloatRect spriteBounds = sprite.getGlobalBounds();
-    float marginX = 4.f; // puedes ajustar
+    float marginX = 4.f;
     float marginY = 6.f;
 
     shape.setSize({
@@ -71,16 +69,14 @@ void BasicEnemy::update(float deltaTime, const std::vector<sf::FloatRect>& groun
         if (isDying) {
             updateAnimation(deltaTime);
             if (frameIndex >= frameCount - 1 && animationTimer == 0.f) {
-                isDying = false; // Ya terminó de morir
+                isDying = false;
             }
         }
-        return; // No mover ni actualizar más
+        return;
     }
-
 
     float dx = direction * speed * deltaTime;
     sprite.move(dx, 0.f);
-    //shape.setPosition(sprite.getPosition());
     updateHitboxPosition();
 
     updateAnimation(deltaTime);
@@ -89,20 +85,6 @@ void BasicEnemy::update(float deltaTime, const std::vector<sf::FloatRect>& groun
 void BasicEnemy::draw(sf::RenderWindow& window) {
     if (isDead() && !isDying) return;
     window.draw(sprite);
-
-    // DEBUG: dibuja la hitbox en rojo transparente
-   /* shape.setFillColor(sf::Color::Transparent);
-    shape.setOutlineColor(sf::Color::Red);
-    shape.setOutlineThickness(1.f);
-    window.draw(shape);
-
-    sf::RectangleShape spriteBox({ frameWidth * visualScale, frameHeight * visualScale });
-    spriteBox.setPosition(sprite.getPosition());
-    spriteBox.setFillColor(sf::Color::Transparent);
-    spriteBox.setOutlineColor(sf::Color::Blue);
-    spriteBox.setOutlineThickness(1.f);
-    window.draw(spriteBox);*/
-
 }
 
 sf::FloatRect BasicEnemy::getBounds() const {
@@ -117,12 +99,11 @@ void BasicEnemy::setSpeed(float s)
 void BasicEnemy::updateHitboxPosition() {
     sf::FloatRect spriteBounds = sprite.getGlobalBounds();
 
-    float desiredWidth = spriteBounds.width - 35.f;  // más estrecho (ajusta aquí)
-    float desiredHeight = spriteBounds.height - 30.f; // opcional: o déjalo igual
+    float desiredWidth = spriteBounds.width - 35.f;
+    float desiredHeight = spriteBounds.height - 30.f;
 
     shape.setSize({ desiredWidth, desiredHeight });
 
-    // Centrar horizontalmente y alinear con los pies del sprite
     shape.setPosition({
         spriteBounds.left + (spriteBounds.width - desiredWidth) / 2.f,
         spriteBounds.top + (spriteBounds.height - desiredHeight)
@@ -135,7 +116,7 @@ void BasicEnemy::takeDamage(int damage) {
         health = 0;
         isDying = true;
         frameIndex = 0;
-        frameCount = 3; // Asumiendo 4 frames en Dead.png
+        frameCount = 3;
         animationSpeed = 0.15f;
 
         sprite.setTexture(deadTexture);

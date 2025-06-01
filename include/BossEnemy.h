@@ -21,6 +21,8 @@ public:
 
     enum class BossState { Walking, Throwing, Dead };
     BossState state = BossState::Walking;
+    void setShootCooldown(float seconds);
+
 
 private:
     void launchBarrel();

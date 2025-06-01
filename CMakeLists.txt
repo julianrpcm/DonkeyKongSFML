@@ -20,7 +20,7 @@ add_subdirectory(external/tmxlite)
 
 # Buscar SFML instalado
 set(SFML_DIR "C:/Users/Julian/SFML/lib/cmake/SFML")
-find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
+find_package(SFML 2.6 COMPONENTS graphics window system REQUIRED)
 
 # Crear el ejecutable
 add_executable(${PROJECT_NAME}

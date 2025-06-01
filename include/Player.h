@@ -34,6 +34,7 @@ public:
     void loadTexture(const std::string& projectPath);
     bool hasDeathAnimationFinished() const;
     void reset(const sf::Vector2f& startPos);
+    void clearBuffs();
 
     enum class PlayerState {
         Idle,
@@ -42,6 +43,8 @@ public:
         Climb,
         Dead,
     };
+
+    void applySpeedBuff(float duration);
 
 private:
     sf::RectangleShape hitbox;
@@ -82,4 +85,8 @@ private:
     void handleBossProjectiles(BossEnemy* boss);
     bool tryStompEnemy(const sf::FloatRect& enemyBounds, std::function<void()> onStomp);
     void updateAnimation(float dt);
+
+    float speedBuffTimer = 0.f;
+    bool speedBuffActive = false;
+
 };

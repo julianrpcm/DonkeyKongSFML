@@ -1,25 +1,29 @@
 #include "Level.h"
 #include <tmxlite/TileLayer.hpp>
 #include <tmxlite/ObjectGroup.hpp>
+#include <filesystem>
 #include <iostream>
 
-bool Level::loadFromFile(const std::string& tmxPath) {
+bool Level::loadFromFile(const std::string& tmxPath, const std::string& projectRoot) {
     if (!map.load(tmxPath)) {
         std::cerr << "Failed to load map: " << tmxPath << "\n";
         return false;
     }
 
-    auto tileSize = map.getTileSize();
-    auto mapSize = map.getTileCount();
+    const auto tileSize = map.getTileSize();
+    const auto mapSize = map.getTileCount();
     tilesetTextures.clear();
+
+    const std::filesystem::path basePath = std::filesystem::path(projectRoot) / "assets" / "tilesets";
 
     for (const auto& tileset : map.getTilesets()) {
         sf::Texture tex;
-        std::string fullPath = tileset.getImagePath();
+        const auto imagePath = tileset.getImagePath();
 
-        if (tex.loadFromFile(fullPath)) {
+        const auto fullPath = std::filesystem::weakly_canonical(basePath / std::filesystem::path(tileset.getImagePath()).filename());
+
+        if (tex.loadFromFile(fullPath.string())) {
             tilesetTextures[tileset.getFirstGID()] = std::move(tex);
-            std::cout << "Tileset loaded: " << fullPath << "\n";
         }
         else {
             std::cerr << "Failed to load tileset: " << fullPath << "\n";
@@ -27,52 +31,45 @@ bool Level::loadFromFile(const std::string& tmxPath) {
     }
 
     for (const auto& layer : map.getLayers()) {
-        if (!layer->getVisible()) continue;
+        if (!layer->getVisible() || layer->getType() != tmx::Layer::Type::Object) continue;
 
+        const auto& objGroup = layer->getLayerAs<tmx::ObjectGroup>();
         const std::string& name = layer->getName();
-        if (layer->getType() == tmx::Layer::Type::Object) {
-            const auto& objGroup = layer->getLayerAs<tmx::ObjectGroup>();
 
-            for (const auto& obj : objGroup.getObjects()) {
-                auto pos = obj.getPosition();
-                auto size = obj.getAABB();
-                sf::FloatRect rect(pos.x, pos.y, size.width, size.height);
+        for (const auto& obj : objGroup.getObjects()) {
+            const auto pos = obj.getPosition();
+            const auto size = obj.getAABB();
+            sf::FloatRect rect(pos.x, pos.y, size.width, size.height);
 
-                if (name == "Collisions") {
-                    collisionRects.push_back(rect);
-                }
-                else if (name == "Ladders") {
-                    ladderRects.push_back(rect);
-                }
-                else if (name == "LaddersBlockers") {
-                    ladderBlockers.push_back(rect);
-                }
+            if (name == "Collisions") {
+                collisionRects.push_back(rect);
+            }
+            else if (name == "Ladders") {
+                ladderRects.push_back(rect);
+            }
+            else if (name == "LaddersBlockers") {
+                ladderBlockers.push_back(rect);
             }
         }
     }
-
-    std::cout << "Loaded map: " << tmxPath << "\n";
-    std::cout << "Colliders: " << collisionRects.size() << "\n";
-    std::cout << "Ladders: " << ladderRects.size() << "\n";
 
     return true;
 }
 
 void Level::draw(sf::RenderWindow& window) const {
-    const auto& mapSize = map.getTileCount();
-    const auto& tileSize = map.getTileSize();
+    const auto mapSize = map.getTileCount();
+    const auto tileSize = map.getTileSize();
 
     for (const auto& layer : map.getLayers()) {
-        if (layer->getType() != tmx::Layer::Type::Tile || !layer->getVisible())
-            continue;
+        if (layer->getType() != tmx::Layer::Type::Tile || !layer->getVisible()) continue;
 
         const auto& tileLayer = layer->getLayerAs<tmx::TileLayer>();
         const auto& tiles = tileLayer.getTiles();
 
         for (std::size_t y = 0; y < mapSize.y; ++y) {
             for (std::size_t x = 0; x < mapSize.x; ++x) {
-                std::size_t index = x + y * mapSize.x;
-                std::uint32_t tileID = tiles[index].ID;
+                const std::size_t index = x + y * mapSize.x;
+                const std::uint32_t tileID = tiles[index].ID;
                 if (tileID == 0) continue;
 
                 const sf::Texture* texture = nullptr;
@@ -88,9 +85,9 @@ void Level::draw(sf::RenderWindow& window) const {
 
                 if (!texture) continue;
 
-                std::size_t columns = texture->getSize().x / tileSize.x;
-                std::size_t tu = localID % columns;
-                std::size_t tv = localID / columns;
+                const std::size_t columns = texture->getSize().x / tileSize.x;
+                const std::size_t tu = localID % columns;
+                const std::size_t tv = localID / columns;
 
                 sf::Sprite sprite;
                 sprite.setTexture(*texture);

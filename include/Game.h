@@ -13,6 +13,7 @@
 #include "ScoreManager.h"
 #include "Coin.h"
 #include "VenomEnemy.h"
+#include <SpeedRune.h>
 
 class Game {
 public:
@@ -20,7 +21,6 @@ public:
     void run();
 
 private:
-    // === Estados ===
     enum class EnemyType {
         Basic,
         Venom,
@@ -35,7 +35,6 @@ private:
 
     GameState gameState = GameState::MainMenu;
 
-    // === Métodos principales ===
     std::string getProjectPath();
     void processEvents();
     void update(float deltaTime);
@@ -44,31 +43,28 @@ private:
     void restartLevelFromBeginning();
     void loadLevel();
 
-    // === Métodos auxiliares ===
     void initUI();
     void updateUI();
     void spawnEnemyAt(EnemyType type, int colliderIndex);
     void spawnRandomCoin();
+    void spawnRandomRune();
 
-    // === Ventana y reloj ===
     sf::RenderWindow window;
     sf::Clock clock;
 
-    // === Elementos del juego ===
     Level level;
     Player player;
     std::vector<std::unique_ptr<Enemy>> enemies;
     std::unique_ptr<BossEnemy> bossPtr;
-    std::unique_ptr<VenomEnemy> venomEnemy;
 
     std::vector<sf::FloatRect> baseColliders;
     std::vector<sf::FloatRect> enemyGroundColliders;
     std::vector<sf::FloatRect> barrelGroundColliders;
 
     std::list<Coin> coins;
+    std::vector<SpeedRune> runes;
     ScoreManager scoreManager;
 
-    // === Parámetros de juego ===
     float enemySpeed = 100.f;
     float spawnDelay = 3.f;
     float spawnTimer = 0.f;

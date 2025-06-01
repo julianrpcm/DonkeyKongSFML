@@ -16,6 +16,7 @@ private:
     sf::Sprite sprite;
     sf::Texture texture;
     sf::IntRect frameRect;
+    sf::RectangleShape shape;
 
     float timer = 0.f;
     const float lifetime = 1.f;
