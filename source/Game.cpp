@@ -196,13 +196,20 @@ void Game::restartLevel() {
     std::string projectPath = getProjectPath();
 
     enemies.clear();
+    //bossPtr.reset();
     coins.clear();
+    runes.clear();
 
     spawnEnemyAt(EnemyType::Boss, 0);
+    spawnEnemyAt(EnemyType::Basic, 4);
     spawnEnemyAt(EnemyType::Basic, 14);
     spawnEnemyAt(EnemyType::Basic, 35);
+    spawnEnemyAt(EnemyType::Basic, 29);
+    spawnEnemyAt(EnemyType::Basic, 12);
     spawnEnemyAt(EnemyType::Basic, 21);
-    spawnEnemyAt(EnemyType::Venom, 17);
+    spawnEnemyAt(EnemyType::Venom, 17);   
+    spawnEnemyAt(EnemyType::Venom, 18);
+    spawnEnemyAt(EnemyType::Venom, 9);
 
     spawnRandomCoin();
     spawnRandomCoin();
@@ -263,7 +270,9 @@ void Game::loadLevel() {
     spawnEnemyAt(EnemyType::Boss, 0);
     spawnEnemyAt(EnemyType::Basic, 14);
     spawnEnemyAt(EnemyType::Basic, 35);
+    spawnEnemyAt(EnemyType::Basic, 29);
     spawnEnemyAt(EnemyType::Basic, 21);
+    spawnEnemyAt(EnemyType::Venom, 9);
     spawnEnemyAt(EnemyType::Venom, 17);
 
     spawnRandomCoin();
@@ -369,7 +378,12 @@ void Game::spawnEnemyAt(EnemyType type, int colliderIndex) {
     switch (type) {
     case EnemyType::Basic: {
         auto enemy = std::make_unique<BasicEnemy>(collider, getProjectPath());
-        enemy->setSpeed(enemySpeed);
+
+        float maxSpeed = 250.f;
+        float minSpeed = 80.f;
+        float adjustedSpeed = std::clamp(enemySpeed, minSpeed, maxSpeed);
+        enemy->setSpeed(adjustedSpeed);
+
         enemies.push_back(std::move(enemy));
         break;
     }
