@@ -1,6 +1,6 @@
 Game Description:
 
-In this retro-style platformer inspired by Donkey Kong, the player must navigate through increasingly challenging levels filled with enemies, hazards, and collectible coins. The goal is to survive, collect as many points as possible, and defeat the boss to advance. Each level becomes progressively harder, with faster enemies, more frequent traps, and an increasing number of projectiles.
+In this retro-style platformer inspired by Donkey Kong, the player must traverse increasingly challenging levels full of enemies, hazards and collectible coins. The goal is to survive, score as many points as possible and defeat the boss to advance. Each level becomes progressively more difficult, with faster enemies, more frequent traps and an increasing number of projectiles. In addition, the player has a speed power-up that allows them to move faster for a limited time which adds a layer of strategy to the movement through the level.
 
 Challenges:
 
@@ -16,6 +16,6 @@ Controls:
 
 Arrow keys – Move left/right
 
-Up arrow – Climb ladders
+Up/Down arrow – Climb up/down stairs
 
 Spacebar – Jump
