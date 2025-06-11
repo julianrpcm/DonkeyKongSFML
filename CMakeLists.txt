@@ -1,37 +1,57 @@
 cmake_minimum_required(VERSION 3.10)
 project(DonkeyKongSFML)
 
-# Estándar mínimo de C++
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Incluir headers desde carpeta include/
+# headers
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
-# Archivos fuente principales
+# source
 file(GLOB SOURCES "source/*.cpp")
 
-# Incluir tmxlite como submódulo
+# tmxlite
 set(TMXLITE_STATIC_LIB ON CACHE BOOL "Build tmxlite as static library")
 add_subdirectory(external/tmxlite)
 
-# Buscar SFML instalado
-set(SFML_DIR "C:/Users/Julian/SFML/lib/cmake/SFML")
-find_package(SFML 2.6 COMPONENTS graphics window system REQUIRED)
+# Download SFML
+include(FetchContent)
 
-# Crear el ejecutable
+set(SFML_BUILD_SHARED_LIBS OFF CACHE BOOL "Build SFML as static library" FORCE)
+
+FetchContent_Declare(
+
+  SFML
+  GIT_REPOSITORY https://github.com/SFML/SFML.git
+  GIT_TAG 2.6.2
+)
+FetchContent_MakeAvailable(SFML)
+
+# exe
 add_executable(${PROJECT_NAME}
     ${SOURCES}
-    ${TMXLITE_SRC}  # opcional si tmxlite necesita fuentes explícitas
-    ${PUGIXML_SRC}  # opcional si pugixml necesita fuentes explícitas
 )
 
-# Enlazar bibliotecas necesarias
 target_link_libraries(${PROJECT_NAME}
-    PRIVATE
+   PRIVATE
     tmxlite
-    sfml-graphics sfml-window sfml-system
+    sfml-graphics 
 )
 
-# Copiar assets automáticamente al directorio de build
+set(SFML_DLL_DIR "${CMAKE_BINARY_DIR}/_deps/sfml-build/lib/$<CONFIG>")
+
+# DLL
+set(SFML_DLLS
+    "${SFML_DLL_DIR}/sfml-graphics-d-2.dll"
+    "${SFML_DLL_DIR}/sfml-window-d-2.dll"
+    "${SFML_DLL_DIR}/sfml-system-d-2.dll"
+)
+
+add_custom_command(TARGET ${PROJECT_NAME}
+    POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${SFML_DLLS}
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+)
+
 file(COPY assets/ DESTINATION ${CMAKE_BINARY_DIR}/assets)

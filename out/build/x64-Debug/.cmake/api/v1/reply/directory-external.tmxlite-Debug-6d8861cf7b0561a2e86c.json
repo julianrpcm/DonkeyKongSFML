@@ -55,7 +55,7 @@
 				"external/tmxlite/tmxlite-d.lib"
 			],
 			"targetId" : "tmxlite::@08a9e8f693582fac44e7",
-			"targetIndex" : 1,
+			"targetIndex" : 7,
 			"targetIsImportLibrary" : true,
 			"type" : "target"
 		},
@@ -68,7 +68,7 @@
 				"external/tmxlite/tmxlite-d.dll"
 			],
 			"targetId" : "tmxlite::@08a9e8f693582fac44e7",
-			"targetIndex" : 1,
+			"targetIndex" : 7,
 			"type" : "target"
 		},
 		{

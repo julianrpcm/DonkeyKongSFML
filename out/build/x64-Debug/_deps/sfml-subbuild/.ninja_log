@@ -1,0 +1,21 @@
+# ninja log v6
+3	49	7712568531584368	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-mkdir	eb2614b9a4955618
+3	49	7712568531584368	C:/Users/Julian/source/repos/DonkeyKongSFML/out/build/x64-Debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-mkdir	eb2614b9a4955618
+50	13393	7712568665028711	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-download	faf5d9e26972dfcf
+50	13393	7712568665028711	C:/Users/Julian/source/repos/DonkeyKongSFML/out/build/x64-Debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-download	faf5d9e26972dfcf
+13394	13517	7712568665079046	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-update	fa590adbbea3bd4d
+13394	13517	7712568665079046	C:/Users/Julian/source/repos/DonkeyKongSFML/out/build/x64-Debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-update	fa590adbbea3bd4d
+13517	13557	7712568666674441	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-patch	869bb75169d73d05
+13517	13557	7712568666674441	C:/Users/Julian/source/repos/DonkeyKongSFML/out/build/x64-Debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-patch	869bb75169d73d05
+13558	13597	7712568667070981	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-configure	6e84db2b4d639044
+13558	13597	7712568667070981	C:/Users/Julian/source/repos/DonkeyKongSFML/out/build/x64-Debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-configure	6e84db2b4d639044
+13598	13639	7712568667491707	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-build	d67623bf94288bc5
+13598	13639	7712568667491707	C:/Users/Julian/source/repos/DonkeyKongSFML/out/build/x64-Debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-build	d67623bf94288bc5
+13639	13678	7712568667888443	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-install	1124c00ab99088a0
+13639	13678	7712568667888443	C:/Users/Julian/source/repos/DonkeyKongSFML/out/build/x64-Debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-install	1124c00ab99088a0
+13678	13721	7712568668297306	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-test	44bdcc9be27e4013
+13678	13721	7712568668297306	C:/Users/Julian/source/repos/DonkeyKongSFML/out/build/x64-Debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-test	44bdcc9be27e4013
+13721	13776	7712568668870919	CMakeFiles/sfml-populate-complete	b802ee887121fdee
+13721	13776	7712568668870919	sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-done	b802ee887121fdee
+13721	13776	7712568668870919	C:/Users/Julian/source/repos/DonkeyKongSFML/out/build/x64-Debug/_deps/sfml-subbuild/CMakeFiles/sfml-populate-complete	b802ee887121fdee
+13721	13776	7712568668870919	C:/Users/Julian/source/repos/DonkeyKongSFML/out/build/x64-Debug/_deps/sfml-subbuild/sfml-populate-prefix/src/sfml-populate-stamp/sfml-populate-done	b802ee887121fdee

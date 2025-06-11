@@ -29,13 +29,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 26,
+				"line" : 30,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 33,
+				"line" : 37,
 				"parent" : 0
 			},
 			{
@@ -67,8 +67,7 @@
 				},
 				{
 					"backtrace" : 2,
-					"isSystem" : true,
-					"path" : "C:/Users/Julian/SFML/include"
+					"path" : "C:/Users/Julian/source/repos/DonkeyKongSFML/out/build/x64-Debug/_deps/sfml-src/include"
 				}
 			],
 			"language" : "CXX",
@@ -103,6 +102,18 @@
 		{
 			"backtrace" : 2,
 			"id" : "tmxlite::@08a9e8f693582fac44e7"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "sfml-system::@8cb1db2982443611e568"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "sfml-window::@5730451e331e3690ae65"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "sfml-graphics::@98af38147d5fa7e70f61"
 		}
 	],
 	"id" : "DonkeyKongSFML::@6890427a1f51a3e7e1df",
@@ -125,17 +136,17 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "C:\\Users\\Julian\\SFML\\lib\\sfml-graphics-d.lib",
+				"fragment" : "_deps\\sfml-build\\lib\\sfml-graphics-d.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "C:\\Users\\Julian\\SFML\\lib\\sfml-window-d.lib",
+				"fragment" : "_deps\\sfml-build\\lib\\sfml-window-d.lib",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "C:\\Users\\Julian\\SFML\\lib\\sfml-system-d.lib",
+				"fragment" : "_deps\\sfml-build\\lib\\sfml-system-d.lib",
 				"role" : "libraries"
 			},
 			{

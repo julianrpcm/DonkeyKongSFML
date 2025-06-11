@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/Julian/source/repos/DonkeyKongSFML
+# Install script for directory: C:/Users/Julian/source/repos/DonkeyKongSFML/out/build/x64-Debug/_deps/sfml-src/src/SFML/Network
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -32,20 +32,11 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "FALSE")
 endif()
 
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for each subdirectory.
-  include("C:/Users/Julian/source/repos/DonkeyKongSFML/out/build/x64-Debug/external/tmxlite/cmake_install.cmake")
-  include("C:/Users/Julian/source/repos/DonkeyKongSFML/out/build/x64-Debug/_deps/sfml-build/cmake_install.cmake")
-
+if(CMAKE_INSTALL_COMPONENT STREQUAL "devel" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY OPTIONAL FILES "C:/Users/Julian/source/repos/DonkeyKongSFML/out/build/x64-Debug/_deps/sfml-build/lib/sfml-network-d.lib")
 endif()
 
-if(CMAKE_INSTALL_COMPONENT)
-  set(CMAKE_INSTALL_MANIFEST "install_manifest_${CMAKE_INSTALL_COMPONENT}.txt")
-else()
-  set(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
+if(CMAKE_INSTALL_COMPONENT STREQUAL "bin" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE SHARED_LIBRARY FILES "C:/Users/Julian/source/repos/DonkeyKongSFML/out/build/x64-Debug/_deps/sfml-build/lib/sfml-network-d-2.dll")
 endif()
 
-string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
-       "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/Julian/source/repos/DonkeyKongSFML/out/build/x64-Debug/${CMAKE_INSTALL_MANIFEST}"
-     "${CMAKE_INSTALL_MANIFEST_CONTENT}")
